@@ -33,9 +33,9 @@ public class MainActivity extends Activity {
     }
 
     public CharSequence getRpm() {
-        final TextView mRpm =
+        final TextView rpm =
                 (TextView) findViewById(R.id.rpm);
-        return mRpm.getText();
+        return rpm.getText();
     }
 
     @Override
@@ -139,7 +139,7 @@ public class MainActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        final Intent intent = new Intent(MainActivity.this, feedRateActivity.class);
+        final Intent intent = new Intent(MainActivity.this, FeedRateActivity.class);
 
         int id = item.getItemId();
 
