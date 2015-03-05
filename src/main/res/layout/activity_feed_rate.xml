@@ -1,0 +1,143 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:id="@+id/relativeLayoutFeed"
+    tools:context="com.laufersteppenwolf.cutcalc.feedRateActivity">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_button_milling"
+        android:id="@+id/buttonMillingFeed"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:maxWidth="110dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_button_drilling"
+        android:id="@+id/buttonDrillingFeed"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/buttonMillingFeed"
+        android:layout_toStartOf="@+id/buttonMillingFeed"
+        android:maxWidth="110dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_button_turning"
+        android:id="@+id/buttonTurningFeed"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/buttonMillingFeed"
+        android:layout_toEndOf="@+id/buttonMillingFeed"
+        android:maxWidth="110dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_rpm"
+        android:id="@+id/rpmBoxFeed"
+        android:layout_below="@+id/buttonMillingFeed"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/rpmFeed"
+        android:layout_below="@+id/rpmBoxFeed"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal" /> <!--TODO: set RPM via code -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_feed"
+        android:id="@+id/feedBox"
+        android:layout_below="@+id/rpmFeed"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/feed"
+        android:layout_below="@+id/feedBox"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="@string/string_default_feed"
+        android:gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_blades"
+        android:id="@+id/bladesBoxFeed"
+        android:layout_below="@+id/feed"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/bladesFeed"
+        android:layout_below="@+id/bladesBoxFeed"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="@string/string_default_blades"
+        android:gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_feed_rate"
+        android:id="@+id/feedRateBox"
+        android:layout_below="@+id/bladesFeed"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/feedRate"
+        android:layout_below="@+id/feedRateBox"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:gravity="center_horizontal" />
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_pvc"
+        android:id="@+id/switchPvcFeed"
+        android:layout_below="@+id/feedRate"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:checked="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_calculate"
+        android:id="@+id/buttonCalcFeed"
+        android:layout_below="@+id/switchPvcFeed"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"/>
+
+</RelativeLayout>
