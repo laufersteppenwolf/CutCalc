@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feedRateActivity"
+            android:name=".FeedRateActivity"
             android:label="@string/title_activity_feed_rate"
             android:parentActivityName=".MainActivity">
             <meta-data

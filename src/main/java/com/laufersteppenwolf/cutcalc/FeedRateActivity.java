@@ -123,6 +123,7 @@ public class FeedRateActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_feed_rate, menu);
+        getMenuInflater().inflate(R.menu.menu_feed_rate_features, menu);
         return true;
     }
 
@@ -134,8 +135,12 @@ public class FeedRateActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_features_feedRate:
+                this.finish();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
