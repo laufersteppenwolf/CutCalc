@@ -1,12 +1,15 @@
 package com.laufersteppenwolf.cutcalc;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.UserManager;
 import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,12 +20,20 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Random;
 
 
 public class MainActivity extends Activity {
+
+    public static int mMode = 0;  // 0 == Milling; 1 == Drilling; 2 == Turning
+    public static int mMonkey = 0; //Monkey counter
+
+    Random r = new Random();
+    public int randomCount = r.nextInt(16 - 5) + 5;
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
@@ -36,6 +47,29 @@ public class MainActivity extends Activity {
         final TextView rpm =
                 (TextView) findViewById(R.id.rpm);
         return rpm.getText();
+    }
+
+    public void changeMode(int mode) {
+        final RelativeLayout mRelLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
+        final TextView mVc = (TextView) findViewById(R.id.cuttingSpeed);
+
+        if (mode == 1) {
+            mVc.setText(R.string.string_vc_drilling);
+            mRelLayout.setBackgroundResource(R.drawable.bohrer_scaled_new_hm);
+        } else if (mode == 2) {
+            mVc.setText(R.string.string_vc_turning);
+            mRelLayout.setBackgroundResource(R.drawable.drehmeissel_scaled);
+        } else{
+            mVc.setText(R.string.string_vc_milling);
+            mRelLayout.setBackgroundResource(R.drawable.schaftfraeser_scaled);
+        }
+        doCalc();
+    }
+
+    public void doCalc() {
+        final Button buttonCalc = (Button) findViewById(R.id.buttonCalc);
+
+        buttonCalc.performClick();
     }
 
     @Override
@@ -56,17 +90,41 @@ public class MainActivity extends Activity {
                 (TextView) findViewById(R.id.cuttingSpeed);
         final TextView mRpm =
                 (TextView) findViewById(R.id.rpm);
-        final TextView mRpmFeed =
-                (TextView) findViewById(R.id.rpmFeed);
 
-        final RelativeLayout mRelLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
-//        mRelLayout.setBackgroundResource(R.drawable.schaftfraeser_scaled);
+//        final RelativeLayout mRelLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
         final Animation shakeX = AnimationUtils.loadAnimation(this, R.anim.shake_x);
 
+        final Drawable defaultBackground = mDiameter.getBackground();
+
         pvcSwitch.setChecked(false); // Don't use PVC data by default
 
-        mRpm.setText("0");
+        mDiameter.setOnClickListener(
+                new TextView.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        doCalc();
+                    }
+                }
+        );
+
+        mVc.setOnClickListener(
+                new TextView.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        doCalc();
+                    }
+                }
+        );
+
+        pvcSwitch.setOnClickListener(
+                new Switch.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        doCalc();
+                    }
+                }
+        );
 
         buttonCalc.setOnClickListener(
                 new Button.OnClickListener() {
@@ -81,7 +139,7 @@ public class MainActivity extends Activity {
                             buttonCalc.startAnimation(shakeX);
                             return;
                         } else {
-                            mDiameter.setBackgroundColor(Color.TRANSPARENT);
+                            mDiameter.setBackground(defaultBackground);
                         }
 
                         double result = round((vc * 1000)/(Math.PI * diameter),2);
@@ -90,6 +148,21 @@ public class MainActivity extends Activity {
                             result = multiplier * result;
                         }
                         mRpm.setText(Double.toString(result));
+
+                        //Just for fun :D
+                        mMonkey++;
+                        if (mMonkey == randomCount && mMode == 0) {
+                            mMonkey = 0;
+                            randomCount = r.nextInt(21 - 7) + 7;
+
+                            if (ActivityManager.isUserAMonkey()) {
+                                Toast.makeText(getApplicationContext(), getString(R.string.string_monkey),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), getString(R.string.string_no_monkey),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
                 }
         );
@@ -97,9 +170,8 @@ public class MainActivity extends Activity {
                 new Button.OnClickListener()  {
                     @Override
                     public void onClick(View v) {
-                        mVc.setText(R.string.string_vc_drilling);
-                        mRelLayout.setBackgroundResource(R.drawable.bohrer_scaled);
-                        buttonCalc.performClick();
+                        mMode = 1;
+                        changeMode(mMode);
                     }
                 }
         );
@@ -107,9 +179,8 @@ public class MainActivity extends Activity {
                 new Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mVc.setText(R.string.string_vc_milling);
-                        mRelLayout.setBackgroundResource(R.drawable.schaftfraeser_scaled);
-                        buttonCalc.performClick();
+                        mMode = 0;
+                        changeMode(mMode);
                     }
                 }
         );
@@ -117,14 +188,19 @@ public class MainActivity extends Activity {
                 new Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mVc.setText(R.string.string_vc_turning);
-                        mRelLayout.setBackgroundResource(R.drawable.drehmeissel_scaled);
-                        buttonCalc.performClick();
+                        mMode = 2;
+                        changeMode(mMode);
                     }
                 }
         );
+        changeMode(mMode);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        changeMode(mMode);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -149,6 +225,7 @@ public class MainActivity extends Activity {
                 return true;
             case R.id.action_features_feedRate:
                 intent.putExtra("RPM", getRpm().toString());
+                intent.putExtra("Mode", mMode);
                 startActivity(intent);
                 return true;
         }

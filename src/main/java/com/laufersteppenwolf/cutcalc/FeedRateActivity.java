@@ -20,12 +20,37 @@ import java.math.RoundingMode;
 
 public class FeedRateActivity extends Activity {
 
+    public static int mMode = 0;
+
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
+    public void changeMode(int mode) {
+        final RelativeLayout mRelLayout = (RelativeLayout) findViewById(R.id.relativeLayoutFeed);
+        final TextView mBlades = (TextView) findViewById(R.id.bladesFeed);
+
+        if (mode == 1) {
+            mBlades.setText(R.string.string_default_blades_drilling);
+            mRelLayout.setBackgroundResource(R.drawable.bohrer_scaled_new_hm);
+        } else if (mode == 2) {
+            mBlades.setText(R.string.string_default_blades_turning);
+            mRelLayout.setBackgroundResource(R.drawable.drehmeissel_scaled);
+        } else{
+            mBlades.setText(R.string.string_default_blades_milling);
+            mRelLayout.setBackgroundResource(R.drawable.schaftfraeser_scaled);
+        }
+        doCalc();
+    }
+
+    public void doCalc() {
+        final Button buttonCalc = (Button) findViewById(R.id.buttonCalcFeed);
+
+        buttonCalc.performClick();
     }
 
     @Override
@@ -53,11 +78,50 @@ public class FeedRateActivity extends Activity {
         final String mRpmRpm =
                 intent.getStringExtra("RPM");
 
-        final RelativeLayout mRelLayout = (RelativeLayout) findViewById(R.id.relativeLayoutFeed);
-        mRelLayout.setBackgroundResource(R.drawable.schaftfraeser_scaled);
+        mMode = intent.getIntExtra("Mode", 0);
+
+//        final RelativeLayout mRelLayout = (RelativeLayout) findViewById(R.id.relativeLayoutFeed);
+
+        changeMode(mMode);
 
         pvcSwitch.setChecked(false); // Don't use PVC data by default
         mRpm.setText(mRpmRpm);       // Use the RPM from the previously calculated data
+
+        pvcSwitch.setOnClickListener(
+                new Switch.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        doCalc();
+                    }
+                }
+        );
+
+        mFeed.setOnClickListener(
+                new TextView.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        doCalc();
+                    }
+                }
+        );
+
+        mBlades.setOnClickListener(
+                new TextView.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        doCalc();
+                    }
+                }
+        );
+
+        mRpm.setOnClickListener(
+                new TextView.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        doCalc();
+                    }
+                }
+        );
 
         buttonCalc.setOnClickListener(
                 new Button.OnClickListener() {
@@ -67,14 +131,6 @@ public class FeedRateActivity extends Activity {
                         double rpm = Double.parseDouble(mRpm.getText().toString());
                         double feed = Double.parseDouble(mFeed.getText().toString());
                         double blades = Double.parseDouble(mBlades.getText().toString());
-
-/*                        if (diameter == 0 ) {
-                            mDiameter.setBackgroundColor(Color.RED);
-                            buttonCalc.startAnimation(shakeX);
-                            return;
-                        } else {
-                            mDiameter.setBackgroundColor(Color.TRANSPARENT);
-                        } */ //TODO: Add warnings and NPE preventions
 
                         double result = round(rpm * feed * blades,2);
 
@@ -89,9 +145,8 @@ public class FeedRateActivity extends Activity {
                 new Button.OnClickListener()  {
                     @Override
                     public void onClick(View v) {
-                        mBlades.setText(R.string.string_default_blades_drilling);
-                        mRelLayout.setBackgroundResource(R.drawable.bohrer_scaled);
-                        buttonCalc.performClick();
+                        mMode = 1;
+                        changeMode(mMode);
                     }
                 }
         );
@@ -99,9 +154,8 @@ public class FeedRateActivity extends Activity {
                 new Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mBlades.setText(R.string.string_default_blades_milling);
-                        mRelLayout.setBackgroundResource(R.drawable.schaftfraeser_scaled);
-                        buttonCalc.performClick();
+                        mMode = 0;
+                        changeMode(mMode);
                     }
                 }
         );
@@ -109,9 +163,8 @@ public class FeedRateActivity extends Activity {
                 new Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mBlades.setText(R.string.string_default_blades_turning);
-                        mRelLayout.setBackgroundResource(R.drawable.drehmeissel_scaled);
-                        buttonCalc.performClick();
+                        mMode = 2;
+                        changeMode(mMode);
                     }
                 }
         );
@@ -132,6 +185,7 @@ public class FeedRateActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -139,6 +193,7 @@ public class FeedRateActivity extends Activity {
             case R.id.action_settings:
                 return true;
             case R.id.action_features_feedRate:
+                MainActivity.mMode = mMode;
                 this.finish();
                 return true;
         }

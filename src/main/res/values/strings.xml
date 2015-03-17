@@ -17,6 +17,9 @@
     <string name="string_vc_milling">20</string>
     <string name="string_vc_turning">50</string>
 
+    <string name="string_no_monkey">According to Google, you are not a monkey...</string>
+    <string name="string_monkey">Congratulations! You are officially a monkey!</string>
+
     <!-- Feed Rate -->
     <string name="title_activity_feed_rate">Feed Rate</string>
     <string name="action_features">Features</string>
