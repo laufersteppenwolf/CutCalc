@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CutCalc</string>
+    <string name="string_diameter">Durchmesser</string>
+    <string name="string_feed">Zustellung</string>
+    <string name="string_feed_rate">Vorschubgeschwindigkeit</string>
+    <string name="string_monkey">Glückwunsch! Sie sind offiziell ein Affe!</string>
+    <string name="string_no_monkey">Laut Google sind Sie kein Affe...</string>
+    <string name="string_pvc">PVC/Alu</string>
+    <string name="string_rpm">Drehzahl</string>
+    <string name="title_activity_feed_rate">Vorschubgeschwindigkeit</string>
+    <string name="action_features">Funktionen</string>
+    <string name="action_features_feedRate">Vorschubgeschwindigkeit</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="string_blades">Schneiden</string>
+    <string name="string_button_drilling">Bohren</string>
+    <string name="string_button_milling">Fräsen</string>
+    <string name="string_button_turning">Drehen</string>
+    <string name="string_calculate">Berechnen!</string>
+    <string name="string_cutting_speed">Schnittgeschwindigkeit</string>
+    <string name="action_features_rpm">Drehzahl</string>
+</resources>

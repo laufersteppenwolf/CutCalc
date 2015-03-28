@@ -17,7 +17,9 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,18 +52,18 @@ public class MainActivity extends Activity {
     }
 
     public void changeMode(int mode) {
-        final RelativeLayout mRelLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
+        final ScrollView mScrollView = (ScrollView) findViewById(R.id.scrollView);
         final TextView mVc = (TextView) findViewById(R.id.cuttingSpeed);
 
         if (mode == 1) {
             mVc.setText(R.string.string_vc_drilling);
-            mRelLayout.setBackgroundResource(R.drawable.bohrer_scaled_new_hm);
+            mScrollView.setBackgroundResource(R.drawable.drill);
         } else if (mode == 2) {
             mVc.setText(R.string.string_vc_turning);
-            mRelLayout.setBackgroundResource(R.drawable.drehmeissel_scaled);
+            mScrollView.setBackgroundResource(R.drawable.turning_chisel);
         } else{
             mVc.setText(R.string.string_vc_milling);
-            mRelLayout.setBackgroundResource(R.drawable.schaftfraeser_scaled);
+            mScrollView.setBackgroundResource(R.drawable.milling_cutter);
         }
         doCalc();
     }

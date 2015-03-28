@@ -8,7 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -31,18 +33,18 @@ public class FeedRateActivity extends Activity {
     }
 
     public void changeMode(int mode) {
-        final RelativeLayout mRelLayout = (RelativeLayout) findViewById(R.id.relativeLayoutFeed);
+        final ScrollView mScrollView = (ScrollView) findViewById(R.id.scrollViewFeed);
         final TextView mBlades = (TextView) findViewById(R.id.bladesFeed);
 
         if (mode == 1) {
             mBlades.setText(R.string.string_default_blades_drilling);
-            mRelLayout.setBackgroundResource(R.drawable.bohrer_scaled_new_hm);
+            mScrollView.setBackgroundResource(R.drawable.drill);
         } else if (mode == 2) {
             mBlades.setText(R.string.string_default_blades_turning);
-            mRelLayout.setBackgroundResource(R.drawable.drehmeissel_scaled);
+            mScrollView.setBackgroundResource(R.drawable.turning_chisel);
         } else{
             mBlades.setText(R.string.string_default_blades_milling);
-            mRelLayout.setBackgroundResource(R.drawable.schaftfraeser_scaled);
+            mScrollView.setBackgroundResource(R.drawable.milling_cutter);
         }
         doCalc();
     }

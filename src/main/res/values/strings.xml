@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">CutCalc</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="string_button_drilling">Drilling</string>
     <string name="string_button_milling">Milling</string>
@@ -11,11 +10,11 @@
     <string name="string_rpm">RPM</string>
     <string name="string_pvc">PVC</string>
     <string name="string_calculate">Calculate!</string>
-    <string name="string_default_cutting_speed">20</string>
-    <string name="string_default_diameter">5</string>
-    <string name="string_vc_drilling">18</string>
-    <string name="string_vc_milling">20</string>
-    <string name="string_vc_turning">50</string>
+    <string name="string_default_cutting_speed" translatable="false">20</string>
+    <string name="string_default_diameter" translatable="false">5</string>
+    <string name="string_vc_drilling" translatable="false">18</string>
+    <string name="string_vc_milling" translatable="false">20</string>
+    <string name="string_vc_turning" translatable="false">50</string>
 
     <string name="string_no_monkey">According to Google, you are not a monkey...</string>
     <string name="string_monkey">Congratulations! You are officially a monkey!</string>
@@ -23,13 +22,13 @@
     <!-- Feed Rate -->
     <string name="title_activity_feed_rate">Feed Rate</string>
     <string name="action_features">Features</string>
-    <string name="action_features_feedRate">Feed Rate</string>
+    <string name="action_features_rpm">RPM</string>
 
-    <string name="string_default_blades_drilling">2</string>
-    <string name="string_default_blades_milling">4</string>
-    <string name="string_default_blades_turning">1</string>
-    <string name="string_default_feed">0.1</string>
-    <string name="string_default_blades">4</string>
+    <string name="string_default_blades_drilling" translatable="false">2</string>
+    <string name="string_default_blades_milling" translatable="false">4</string>
+    <string name="string_default_blades_turning" translatable="false">1</string>
+    <string name="string_default_feed" translatable="false">0.1</string>
+    <string name="string_default_blades" translatable="false">4</string>
 
     <string name="string_feed">Feed</string>
     <string name="string_blades">Blades</string>
