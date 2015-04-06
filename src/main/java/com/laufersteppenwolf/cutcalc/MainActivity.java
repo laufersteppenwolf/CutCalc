@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -72,6 +73,19 @@ public class MainActivity extends Activity {
         final Button buttonCalc = (Button) findViewById(R.id.buttonCalc);
 
         buttonCalc.performClick();
+    }
+
+    private boolean appInstalledOrNot(String uri) {
+        PackageManager pm = getPackageManager();
+        boolean app_installed;
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            app_installed = true;
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            app_installed = false;
+        }
+        return app_installed;
     }
 
     @Override
@@ -207,6 +221,10 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        boolean installed = appInstalledOrNot("com.laufersteppenwolf.boschdb");
+        if(installed) {
+            getMenuInflater().inflate(R.menu.menu_main_boschdb, menu);
+        }
         getMenuInflater().inflate(R.menu.menu_main_features, menu);
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -230,6 +248,9 @@ public class MainActivity extends Activity {
                 intent.putExtra("Mode", mMode);
                 startActivity(intent);
                 return true;
+            case R.id.action_features_boschdb:
+                Intent boschdbIntent = getPackageManager().getLaunchIntentForPackage("com.laufersteppenwolf.boschdb");
+                startActivity(boschdbIntent);
         }
 
         return super.onOptionsItemSelected(item);

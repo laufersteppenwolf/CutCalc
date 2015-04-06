@@ -2,6 +2,7 @@ package com.laufersteppenwolf.cutcalc;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -55,6 +56,19 @@ public class FeedRateActivity extends Activity {
         buttonCalc.performClick();
     }
 
+    private boolean appInstalledOrNot(String uri) {
+        PackageManager pm = getPackageManager();
+        boolean app_installed;
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            app_installed = true;
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            app_installed = false;
+        }
+        return app_installed;
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,6 +191,10 @@ public class FeedRateActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        boolean installed = appInstalledOrNot("com.laufersteppenwolf.boschdb");
+        if(installed) {
+            getMenuInflater().inflate(R.menu.menu_main_boschdb, menu);
+        }
         getMenuInflater().inflate(R.menu.menu_feed_rate, menu);
         getMenuInflater().inflate(R.menu.menu_feed_rate_features, menu);
         return true;
@@ -198,6 +216,9 @@ public class FeedRateActivity extends Activity {
                 MainActivity.mMode = mMode;
                 this.finish();
                 return true;
+            case R.id.action_features_boschdb:
+                Intent boschdbIntent = getPackageManager().getLaunchIntentForPackage("com.laufersteppenwolf.boschdb");
+                startActivity(boschdbIntent);
         }
 
         return super.onOptionsItemSelected(item);
