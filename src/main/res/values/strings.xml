@@ -33,5 +33,21 @@
     <string name="string_feed">Feed</string>
     <string name="string_blades">Blades</string>
     <string name="string_feed_rate">Feed Rate</string>
+    <string name="change_background">Change background on mode change</string>
+    <string name="pref_change_background">Change Background on mode change</string>
+    <string name="pref_description_change_background">To improve performance toggle whether or not the background should be changed according to the mode you\'re in</string>
+    <string name="pref_title_default_milling_cuttingspeed">Default cutting speed for milling</string>
+    <string name="pref_title_default_turning_cuttingspeed">Default cutting speed for turning</string>
+    <string name="pref_title_default_drilling_cuttingspeed">Default cutting speed for drilling</string>
+    <string name="pref_title_default_milling_blades">Default number of blades for milling</string>
+    <string name="pref_title_default_turning_blades">Default number of blades for turning</string>
+    <string name="pref_title_default_drilling_blades">Default number of blades for drilling</string>
+    <string name="pref_title_default_feed">Default feed per blade</string>
+    <string name="pref_pvc_default">Use PVC as default</string>
+    <string name="pref_description_pvc_default">Enables the PVC switch by default. Handy when working a lot with PVC</string>
+    <string name="action_features_feedRate">Feed rate</string>
+
+    <string name="pref_header_general">General</string>
+    <string name="title_activity_settings">Settings</string>
 
 </resources>

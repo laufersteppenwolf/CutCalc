@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,6 +12,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.UserManager;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,11 +36,26 @@ import java.util.Random;
 
 public class MainActivity extends Activity {
 
+    public static final String CHANGE_BACKGROUND = "change_background";
+    public static final String PVC_DEFAULT = "pvc_default";
+    public static final String DEFAULT_VC_MILLING = "default_milling_cuttingspeed";
+    public static final String DEFAULT_VC_TURNING = "default_turning_cuttingspeed";
+    public static final String DEFAULT_VC_DRILLING = "default_drilling_cuttingspeed";
+
+    private Boolean mChangeBackground;
+    private Boolean mPvcDefault;
+
+    private String mVcMilling;
+    private String mVcTurning;
+    private String mVcDrilling;
+
     public static int mMode = 0;  // 0 == Milling; 1 == Drilling; 2 == Turning
     public static int mMonkey = 0; //Monkey counter
 
+    Button buttonCalc;
+
     Random r = new Random();
-    public int randomCount = r.nextInt(16 - 5) + 5;
+    public int randomCount = r.nextInt(20 - 7) + 7;
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
@@ -57,21 +76,25 @@ public class MainActivity extends Activity {
         final TextView mVc = (TextView) findViewById(R.id.cuttingSpeed);
 
         if (mode == 1) {
-            mVc.setText(R.string.string_vc_drilling);
-            mScrollView.setBackgroundResource(R.drawable.drill);
+            mVc.setText(mVcDrilling);
+            if (mChangeBackground) {
+                mScrollView.setBackgroundResource(R.drawable.drill);
+            }
         } else if (mode == 2) {
-            mVc.setText(R.string.string_vc_turning);
-            mScrollView.setBackgroundResource(R.drawable.turning_chisel);
+            mVc.setText(mVcTurning);
+            if (mChangeBackground) {
+                mScrollView.setBackgroundResource(R.drawable.turning_chisel);
+            }
         } else{
-            mVc.setText(R.string.string_vc_milling);
-            mScrollView.setBackgroundResource(R.drawable.milling_cutter);
+            mVc.setText(mVcMilling);
+            if (mChangeBackground) {
+                mScrollView.setBackgroundResource(R.drawable.milling_cutter);
+            }
         }
         doCalc();
     }
 
     public void doCalc() {
-        final Button buttonCalc = (Button) findViewById(R.id.buttonCalc);
-
         buttonCalc.performClick();
     }
 
@@ -88,12 +111,24 @@ public class MainActivity extends Activity {
         return app_installed;
     }
 
+    public void getPreferences() {
+        //Get preferences
+        SharedPreferences myPreference= PreferenceManager.getDefaultSharedPreferences(this);
+        mChangeBackground = myPreference.getBoolean(CHANGE_BACKGROUND, true);
+        mPvcDefault = myPreference.getBoolean(PVC_DEFAULT, false);
+        mVcMilling = myPreference.getString(DEFAULT_VC_MILLING, getString(R.string.string_vc_milling));
+        mVcTurning = myPreference.getString(DEFAULT_VC_TURNING, getString(R.string.string_vc_turning));
+        mVcDrilling = myPreference.getString(DEFAULT_VC_DRILLING, getString(R.string.string_vc_drilling));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button buttonCalc = (Button) findViewById(R.id.buttonCalc);
+        //Get preferences
+        getPreferences();
+
         final Button buttonDrilling = (Button) findViewById(R.id.buttonDrilling);
         final Button buttonMilling = (Button) findViewById(R.id.buttonMilling);
         final Button buttonTurning = (Button) findViewById(R.id.buttonTurning);
@@ -107,13 +142,17 @@ public class MainActivity extends Activity {
         final TextView mRpm =
                 (TextView) findViewById(R.id.rpm);
 
-//        final RelativeLayout mRelLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
+        buttonCalc = (Button) findViewById(R.id.buttonCalc);
 
         final Animation shakeX = AnimationUtils.loadAnimation(this, R.anim.shake_x);
 
         final Drawable defaultBackground = mDiameter.getBackground();
 
-        pvcSwitch.setChecked(false); // Don't use PVC data by default
+        if (mPvcDefault) {
+            pvcSwitch.setChecked(true); // Use PVC data by default
+        } else {
+            pvcSwitch.setChecked(false); // Don't use PVC data by default
+        }
 
         mDiameter.setOnClickListener(
                 new TextView.OnClickListener() {
@@ -169,7 +208,7 @@ public class MainActivity extends Activity {
                         mMonkey++;
                         if (mMonkey == randomCount && mMode == 0) {
                             mMonkey = 0;
-                            randomCount = r.nextInt(21 - 7) + 7;
+                            randomCount = r.nextInt(30 - 10) + 10;
 
                             if (ActivityManager.isUserAMonkey()) {
                                 Toast.makeText(getApplicationContext(), getString(R.string.string_monkey),
@@ -215,6 +254,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onRestart() {
         super.onRestart();
+        getPreferences();
         changeMode(mMode);
     }
 
@@ -242,6 +282,8 @@ public class MainActivity extends Activity {
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_settings:
+                final Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
                 return true;
             case R.id.action_features_feedRate:
                 intent.putExtra("RPM", getRpm().toString());

@@ -19,4 +19,18 @@
     <string name="string_calculate">Berechnen!</string>
     <string name="string_cutting_speed">Schnittgeschwindigkeit</string>
     <string name="action_features_rpm">Drehzahl</string>
+    <string name="change_background">Hintergrund bei Moduswechsel ändern</string>
+    <string name="pref_change_background">Hintergrund bei Moduswechsel ändern</string>
+    <string name="pref_description_change_background">Um die Leistung zu verbessern muss der Hintergrund nicht geändert werden</string>
+    <string name="pref_description_pvc_default">Aktiviert den PVC-Modus als Standard-Modus. Praktisch wenn man viel mit PVC arbeitet</string>
+    <string name="pref_header_general">Generelles</string>
+    <string name="pref_pvc_default">PVC-Modus als Standard</string>
+    <string name="pref_title_default_drilling_blades">Anzahl von Schneiden beim Bohren</string>
+    <string name="pref_title_default_milling_blades">Anzahl von Schneiden beim Fräsen</string>
+    <string name="pref_title_default_turning_blades">Anzahl von Schneiden beim Drehen</string>
+    <string name="pref_title_default_drilling_cuttingspeed">Schnittgeschwindigkeit beim Bohren</string>
+    <string name="pref_title_default_milling_cuttingspeed">Schnittgeschwindigkeit beim Fräsen</string>
+    <string name="pref_title_default_turning_cuttingspeed">Schnittgeschwindigkeit beim Drehen</string>
+    <string name="pref_title_default_feed">Zustellung pro Schneide</string>
+    <string name="title_activity_settings">Einstellungen</string>
 </resources>

@@ -2,9 +2,11 @@ package com.laufersteppenwolf.cutcalc;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +25,25 @@ import java.math.RoundingMode;
 
 public class FeedRateActivity extends Activity {
 
+    public static final String CHANGE_BACKGROUND = "change_background";
+    public static final String PVC_DEFAULT = "pvc_default";
+    public static final String DEFAULT_FEED = "default_feed";
+    public static final String DEFAULT_BLADES_MILLING = "default_milling_blades";
+    public static final String DEFAULT_BLADES_TURNING = "default_turning_blades";
+    public static final String DEFAULT_BLADES_DRILLING = "default_drilling_blades";
+
+    private Boolean mChangeBackground;
+    private Boolean mPvcDefault;
+
+    private String mFeed;
+    private String mBladesMilling;
+    private String mBladesTurning;
+    private String mBladesDrilling;
+
     public static int mMode = 0;
+
+    private TextView mFeedView;
+    private Button buttonCalc;
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
@@ -38,21 +58,27 @@ public class FeedRateActivity extends Activity {
         final TextView mBlades = (TextView) findViewById(R.id.bladesFeed);
 
         if (mode == 1) {
-            mBlades.setText(R.string.string_default_blades_drilling);
-            mScrollView.setBackgroundResource(R.drawable.drill);
+            mBlades.setText(mBladesDrilling);
+            if (mChangeBackground) {
+                mScrollView.setBackgroundResource(R.drawable.drill);
+            }
         } else if (mode == 2) {
-            mBlades.setText(R.string.string_default_blades_turning);
-            mScrollView.setBackgroundResource(R.drawable.turning_chisel);
+            mBlades.setText(mBladesTurning);
+            if (mChangeBackground) {
+                mScrollView.setBackgroundResource(R.drawable.turning_chisel);
+            }
         } else{
-            mBlades.setText(R.string.string_default_blades_milling);
-            mScrollView.setBackgroundResource(R.drawable.milling_cutter);
+            mBlades.setText(mBladesMilling);
+            if (mChangeBackground) {
+                mScrollView.setBackgroundResource(R.drawable.milling_cutter);
+            }
         }
+
+        mFeedView.setText(mFeed);
         doCalc();
     }
 
     public void doCalc() {
-        final Button buttonCalc = (Button) findViewById(R.id.buttonCalcFeed);
-
         buttonCalc.performClick();
     }
 
@@ -68,15 +94,27 @@ public class FeedRateActivity extends Activity {
         }
         return app_installed;
     }
-    
+
+    public void getPreferences() {
+        //Get preferences
+        SharedPreferences myPreference= PreferenceManager.getDefaultSharedPreferences(this);
+        mChangeBackground = myPreference.getBoolean(CHANGE_BACKGROUND, true);
+        mPvcDefault = myPreference.getBoolean(PVC_DEFAULT, false);
+        mFeed = myPreference.getString(DEFAULT_FEED, getString(R.string.string_default_feed));
+        mBladesMilling = myPreference.getString(DEFAULT_BLADES_MILLING, getString(R.string.string_default_blades_milling));
+        mBladesTurning = myPreference.getString(DEFAULT_BLADES_TURNING, getString(R.string.string_default_blades_turning));
+        mBladesDrilling = myPreference.getString(DEFAULT_BLADES_DRILLING, getString(R.string.string_default_blades_drilling));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_rate);
 
+        getPreferences();
+
         final Intent intent = getIntent();
 
-        final Button buttonCalc = (Button) findViewById(R.id.buttonCalcFeed);
         final Button buttonDrilling = (Button) findViewById(R.id.buttonDrillingFeed);
         final Button buttonMilling = (Button) findViewById(R.id.buttonMillingFeed);
         final Button buttonTurning = (Button) findViewById(R.id.buttonTurningFeed);
@@ -85,8 +123,7 @@ public class FeedRateActivity extends Activity {
 
         final TextView mRpm =
                 (TextView) findViewById(R.id.rpmFeed);
-        final TextView mFeed =
-                (TextView) findViewById(R.id.feed);
+        mFeedView = (TextView) findViewById(R.id.feed);
         final TextView mBlades =
                 (TextView) findViewById(R.id.bladesFeed);
         final TextView mFeedRate =
@@ -94,14 +131,19 @@ public class FeedRateActivity extends Activity {
         final String mRpmRpm =
                 intent.getStringExtra("RPM");
 
+        buttonCalc = (Button) findViewById(R.id.buttonCalcFeed);
+
         mMode = intent.getIntExtra("Mode", 0);
 
-//        final RelativeLayout mRelLayout = (RelativeLayout) findViewById(R.id.relativeLayoutFeed);
+        if (mPvcDefault) {
+            pvcSwitch.setChecked(true); // Use PVC data by default
+        } else {
+            pvcSwitch.setChecked(false); // Don't use PVC data by default
+        }
+
+        mRpm.setText(mRpmRpm);       // Use the RPM from the previously calculated data
 
         changeMode(mMode);
-
-        pvcSwitch.setChecked(false); // Don't use PVC data by default
-        mRpm.setText(mRpmRpm);       // Use the RPM from the previously calculated data
 
         pvcSwitch.setOnClickListener(
                 new Switch.OnClickListener() {
@@ -112,7 +154,7 @@ public class FeedRateActivity extends Activity {
                 }
         );
 
-        mFeed.setOnClickListener(
+        mFeedView.setOnClickListener(
                 new TextView.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -145,7 +187,7 @@ public class FeedRateActivity extends Activity {
                     public void onClick(View v) {
                         int multiplier = getResources().getInteger(R.integer.multiplier_switch);
                         double rpm = Double.parseDouble(mRpm.getText().toString());
-                        double feed = Double.parseDouble(mFeed.getText().toString());
+                        double feed = Double.parseDouble(mFeedView.getText().toString());
                         double blades = Double.parseDouble(mBlades.getText().toString());
 
                         double result = round(rpm * feed * blades,2);
@@ -187,6 +229,12 @@ public class FeedRateActivity extends Activity {
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        getPreferences();
+        changeMode(mMode);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -211,6 +259,8 @@ public class FeedRateActivity extends Activity {
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_settings:
+                Intent settingsIntent = new Intent(FeedRateActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
                 return true;
             case R.id.action_features_feedRate:
                 MainActivity.mMode = mMode;
