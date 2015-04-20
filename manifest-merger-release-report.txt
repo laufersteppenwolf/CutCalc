@@ -58,6 +58,8 @@ activity#com.laufersteppenwolf.cutcalc.SettingsActivity
 ADDED from AndroidManifest.xml:27:9
 	android:label
 		ADDED from AndroidManifest.xml:29:13
+	android:theme
+		ADDED from AndroidManifest.xml:31:13
 	android:parentActivityName
 		ADDED from AndroidManifest.xml:30:13
 	android:name
