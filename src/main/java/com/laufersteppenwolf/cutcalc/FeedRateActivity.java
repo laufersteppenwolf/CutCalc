@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -186,16 +187,31 @@ public class FeedRateActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         int multiplier = getResources().getInteger(R.integer.multiplier_switch);
-                        double rpm = Double.parseDouble(mRpm.getText().toString());
-                        double feed = Double.parseDouble(mFeedView.getText().toString());
-                        double blades = Double.parseDouble(mBlades.getText().toString());
 
-                        double result = round(rpm * feed * blades,2);
+                        if (mRpm.getText() != null && !mRpm.getText().toString().equals("")) {
+                            if (mFeedView.getText() != null && !mFeedView.getText().toString().equals("")) {
+                                if (mBlades.getText() != null && !mBlades.getText().toString().equals("")) {
 
-                        if (pvcSwitch.isChecked()) {
-                            result = multiplier * result;
-                        }
-                        mFeedRate.setText(Double.toString(result));
+                                    double rpm = Double.parseDouble(mRpm.getText().toString());
+                                    double feed = Double.parseDouble(mFeedView.getText().toString());
+                                    double blades = Double.parseDouble(mBlades.getText().toString());
+
+                                    double result = round(rpm * feed * blades, 2);
+
+                                    if (pvcSwitch.isChecked()) {
+                                        result = multiplier * result;
+                                    }
+                                    mFeedRate.setText(Double.toString(result));
+                                } else {
+                                    Toast.makeText(getApplicationContext(), getString(R.string.toast_add_blades),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), getString(R.string.toast_add_feed),
+                                        Toast.LENGTH_SHORT).show();                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), getString(R.string.toast_add_rpm),
+                                    Toast.LENGTH_SHORT).show();                        }
                     }
                 }
         );

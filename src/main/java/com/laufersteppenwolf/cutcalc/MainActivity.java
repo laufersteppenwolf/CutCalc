@@ -19,6 +19,7 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.text.Layout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +39,8 @@ import java.util.Random;
 
 
 public class MainActivity extends Activity {
+
+    public static final String LOG_TAG = "CutCalc";
 
     public static final String CHANGE_BACKGROUND = "change_background";
     public static final String PVC_DEFAULT = "pvc_default";
@@ -189,37 +192,50 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         int multiplier = getResources().getInteger(R.integer.multiplier_switch);
-                        double vc = Double.parseDouble(mVc.getText().toString());
-                        double diameter = Double.parseDouble(mDiameter.getText().toString());
 
-                        if (diameter == 0 ) {
-                            mDiameter.setBackgroundColor(Color.RED);
-                            buttonCalc.startAnimation(shakeX);
-                            return;
-                        } else {
-                            mDiameter.setBackground(defaultBackground);
-                        }
+                        Log.d(LOG_TAG, "Diameter:" + mDiameter.getText().toString());
 
-                        double result = round((vc * 1000)/(Math.PI * diameter),2);
+                        if (mVc.getText() != null && !mVc.getText().toString().equals("")) {
+                            if (mDiameter.getText() != null && !mDiameter.getText().toString().equals("")) {
+                                double vc = Double.parseDouble(mVc.getText().toString());
+                                double diameter = Double.parseDouble(mDiameter.getText().toString());
 
-                        if (pvcSwitch.isChecked()) {
-                            result = multiplier * result;
-                        }
-                        mRpm.setText(Double.toString(result));
+                                if (diameter == 0) {
+                                    mDiameter.setBackgroundColor(Color.RED);
+                                    buttonCalc.startAnimation(shakeX);
+                                    return;
+                                } else {
+                                    mDiameter.setBackground(defaultBackground);
+                                }
 
-                        //Just for fun :D
-                        mMonkey++;
-                        if (mMonkey == randomCount && mMode == 0) {
-                            mMonkey = 0;
-                            randomCount = r.nextInt(30 - 10) + 10;
+                                double result = round((vc * 1000) / (Math.PI * diameter), 2);
 
-                            if (ActivityManager.isUserAMonkey()) {
-                                Toast.makeText(getApplicationContext(), getString(R.string.string_monkey),
-                                        Toast.LENGTH_SHORT).show();
+                                if (pvcSwitch.isChecked()) {
+                                    result = multiplier * result;
+                                }
+                                mRpm.setText(Double.toString(result));
+
+                                //Just for fun :D
+                                mMonkey++;
+                                if (mMonkey == randomCount && mMode == 0) {
+                                    mMonkey = 0;
+                                    randomCount = r.nextInt(30 - 10) + 10;
+
+                                    if (ActivityManager.isUserAMonkey()) {
+                                        Toast.makeText(getApplicationContext(), getString(R.string.string_monkey),
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), getString(R.string.string_no_monkey),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
                             } else {
-                                Toast.makeText(getApplicationContext(), getString(R.string.string_no_monkey),
+                                Toast.makeText(getApplicationContext(), getString(R.string.toast_add_diameter),
                                         Toast.LENGTH_SHORT).show();
                             }
+                        } else {
+                            Toast.makeText(getApplicationContext(), getString(R.string.toast_add_cutting_speed),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

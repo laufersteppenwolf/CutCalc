@@ -50,4 +50,10 @@
     <string name="pref_header_general">General</string>
     <string name="title_activity_settings">Settings</string>
 
+    <string name="toast_add_blades">Please add the number of Blades!</string>
+    <string name="toast_add_feed">Please add a Feed value!</string>
+    <string name="toast_add_rpm">Please add a RPM value!</string>
+    <string name="toast_add_diameter">Please add a diameter value!</string>
+    <string name="toast_add_cutting_speed">Please add a Cutting Speed value!</string>
+
 </resources>

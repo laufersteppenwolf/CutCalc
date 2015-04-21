@@ -33,4 +33,9 @@
     <string name="pref_title_default_turning_cuttingspeed">Schnittgeschwindigkeit beim Drehen</string>
     <string name="pref_title_default_feed">Zustellung pro Schneide</string>
     <string name="title_activity_settings">Einstellungen</string>
+    <string name="toast_add_blades">Bitte Anzahl der Schneiden angeben!</string>
+    <string name="toast_add_cutting_speed">Bitte Schnittgeschwindigkeit angeben!</string>
+    <string name="toast_add_diameter">Bitte Durchmesser angeben!</string>
+    <string name="toast_add_feed">Bitte Zustellung angeben!</string>
+    <string name="toast_add_rpm">Bitte Drehzahl angeben!</string>
 </resources>
