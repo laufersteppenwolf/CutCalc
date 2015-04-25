@@ -2,6 +2,13 @@
 
     <PreferenceCategory
         android:title="@string/pref_header_general">
+
+    <CheckBoxPreference
+        android:key="dark_theme"
+        android:title="@string/pref_dark_theme"
+        android:summary="@string/pref_description_dark_theme"
+        android:defaultValue="true" />
+
     <CheckBoxPreference
         android:key="change_background"
         android:title="@string/pref_change_background"
@@ -44,6 +51,15 @@
         android:inputType="numberDecimal"
         android:singleLine="true"
         android:maxLines="1" />
+
+    <EditTextPreference
+        android:key="default_pvc_multiplier_rpm"
+        android:title="@string/pref_title_default_pvc_multiplier"
+        android:defaultValue="@integer/multiplier_switch"
+        android:selectAllOnFocus="true"
+        android:inputType="numberDecimal"
+        android:singleLine="true"
+        android:maxLines="1" />
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -81,6 +97,15 @@
         android:defaultValue="@string/string_default_blades_drilling"
         android:selectAllOnFocus="true"
         android:inputType="number"
+        android:singleLine="true"
+        android:maxLines="1" />
+
+    <EditTextPreference
+        android:key="default_pvc_multiplier_feed"
+        android:title="@string/pref_title_default_pvc_multiplier"
+        android:defaultValue="@integer/multiplier_switch"
+        android:selectAllOnFocus="true"
+        android:inputType="numberDecimal"
         android:singleLine="true"
         android:maxLines="1" />
     </PreferenceCategory>

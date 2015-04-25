@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -42,18 +43,24 @@ public class MainActivity extends Activity {
 
     public static final String LOG_TAG = "CutCalc";
 
+    public static final String DARK_THEME = "dark_theme";
     public static final String CHANGE_BACKGROUND = "change_background";
     public static final String PVC_DEFAULT = "pvc_default";
     public static final String DEFAULT_VC_MILLING = "default_milling_cuttingspeed";
     public static final String DEFAULT_VC_TURNING = "default_turning_cuttingspeed";
     public static final String DEFAULT_VC_DRILLING = "default_drilling_cuttingspeed";
+    public static final String DEFAULT_MULTIPLIER = "default_pvc_multiplier_rpm";
 
     private Boolean mChangeBackground;
     private Boolean mPvcDefault;
+    private Boolean mDarkTheme;
+    public static Boolean darkThemeStore;
 
     private String mVcMilling;
     private String mVcTurning;
     private String mVcDrilling;
+
+    private int mMultiplier;
 
     public static int mMode = 0;  // 0 == Milling; 1 == Drilling; 2 == Turning
     public static int mMonkey = 0; //Monkey counter
@@ -120,20 +127,35 @@ public class MainActivity extends Activity {
     public void getPreferences() {
         //Get preferences
         SharedPreferences myPreference= PreferenceManager.getDefaultSharedPreferences(this);
+        mDarkTheme = myPreference.getBoolean(DARK_THEME, true);
         mChangeBackground = myPreference.getBoolean(CHANGE_BACKGROUND, true);
         mPvcDefault = myPreference.getBoolean(PVC_DEFAULT, false);
         mVcMilling = myPreference.getString(DEFAULT_VC_MILLING, getString(R.string.string_vc_milling));
         mVcTurning = myPreference.getString(DEFAULT_VC_TURNING, getString(R.string.string_vc_turning));
         mVcDrilling = myPreference.getString(DEFAULT_VC_DRILLING, getString(R.string.string_vc_drilling));
+        mMultiplier = Integer.parseInt(myPreference.getString(DEFAULT_MULTIPLIER, Integer.toString(getResources().getInteger(R.integer.multiplier_switch))));
+    }
+
+    public static void setShadows(TextView tv) {
+        tv.setShadowLayer(4, 2, 2, Color.BLACK);
+    }
+
+    public static void setShadowsSwitch(Switch s) {
+        s.setShadowLayer(4, 2, 2, Color.BLACK);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         //Get preferences
         getPreferences();
+
+        if (mDarkTheme) {
+            setTheme(android.R.style.Theme_Holo);
+        } else {
+            setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);
+        }
+        setContentView(R.layout.activity_main);
 
         final Button buttonDrilling = (Button) findViewById(R.id.buttonDrilling);
         final Button buttonMilling = (Button) findViewById(R.id.buttonMilling);
@@ -148,6 +170,13 @@ public class MainActivity extends Activity {
         final TextView mRpm =
                 (TextView) findViewById(R.id.rpm);
 
+        final TextView mVcText =
+                (TextView) findViewById(R.id.cuttingSpeedBo);
+        final TextView mDiameterText =
+                (TextView) findViewById(R.id.diameterBox);
+        final TextView mRpmText =
+                (TextView) findViewById(R.id.rpmBox);
+
         buttonCalc = (Button) findViewById(R.id.buttonCalc);
 
         final Animation shakeX = AnimationUtils.loadAnimation(this, R.anim.shake_x);
@@ -159,6 +188,19 @@ public class MainActivity extends Activity {
         } else {
             pvcSwitch.setChecked(false); // Don't use PVC data by default
         }
+
+        //Dark theme
+        if (mDarkTheme) {
+            setShadows(mDiameter);
+            setShadows(mVc);
+            setShadows(mRpm);
+            setShadows(mDiameterText);
+            setShadows(mVcText);
+            setShadows(mRpmText);
+            setShadowsSwitch(pvcSwitch);
+        }
+
+        darkThemeStore = mDarkTheme;
 
         mDiameter.setOnClickListener(
                 new TextView.OnClickListener() {
@@ -191,8 +233,6 @@ public class MainActivity extends Activity {
                 new Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int multiplier = getResources().getInteger(R.integer.multiplier_switch);
-
                         Log.d(LOG_TAG, "Diameter:" + mDiameter.getText().toString());
 
                         if (mVc.getText() != null && !mVc.getText().toString().equals("")) {
@@ -211,7 +251,7 @@ public class MainActivity extends Activity {
                                 double result = round((vc * 1000) / (Math.PI * diameter), 2);
 
                                 if (pvcSwitch.isChecked()) {
-                                    result = multiplier * result;
+                                    result = mMultiplier * result;
                                 }
                                 mRpm.setText(Double.toString(result));
 
@@ -274,6 +314,10 @@ public class MainActivity extends Activity {
     protected void onRestart() {
         super.onRestart();
         getPreferences();
+
+        if (mDarkTheme != darkThemeStore) {
+            this.recreate();
+        }
         changeMode(mMode);
     }
 

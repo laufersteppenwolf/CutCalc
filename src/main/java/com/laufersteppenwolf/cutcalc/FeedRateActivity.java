@@ -4,21 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -26,13 +21,16 @@ import java.math.RoundingMode;
 
 public class FeedRateActivity extends Activity {
 
+    public static final String DARK_THEME = "dark_theme";
     public static final String CHANGE_BACKGROUND = "change_background";
     public static final String PVC_DEFAULT = "pvc_default";
     public static final String DEFAULT_FEED = "default_feed";
     public static final String DEFAULT_BLADES_MILLING = "default_milling_blades";
     public static final String DEFAULT_BLADES_TURNING = "default_turning_blades";
     public static final String DEFAULT_BLADES_DRILLING = "default_drilling_blades";
+    public static final String DEFAULT_MULTIPLIER = "default_pvc_multiplier_feed";
 
+    private Boolean mDarkTheme;
     private Boolean mChangeBackground;
     private Boolean mPvcDefault;
 
@@ -40,6 +38,8 @@ public class FeedRateActivity extends Activity {
     private String mBladesMilling;
     private String mBladesTurning;
     private String mBladesDrilling;
+
+    private int mMultiplier;
 
     public static int mMode = 0;
 
@@ -99,20 +99,28 @@ public class FeedRateActivity extends Activity {
     public void getPreferences() {
         //Get preferences
         SharedPreferences myPreference= PreferenceManager.getDefaultSharedPreferences(this);
+        mDarkTheme = myPreference.getBoolean(DARK_THEME, true);
         mChangeBackground = myPreference.getBoolean(CHANGE_BACKGROUND, true);
         mPvcDefault = myPreference.getBoolean(PVC_DEFAULT, false);
         mFeed = myPreference.getString(DEFAULT_FEED, getString(R.string.string_default_feed));
         mBladesMilling = myPreference.getString(DEFAULT_BLADES_MILLING, getString(R.string.string_default_blades_milling));
         mBladesTurning = myPreference.getString(DEFAULT_BLADES_TURNING, getString(R.string.string_default_blades_turning));
         mBladesDrilling = myPreference.getString(DEFAULT_BLADES_DRILLING, getString(R.string.string_default_blades_drilling));
+        mMultiplier = Integer.parseInt(myPreference.getString(DEFAULT_MULTIPLIER, Integer.toString(getResources().getInteger(R.integer.multiplier_switch))));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feed_rate);
-
+        //Get preferences
         getPreferences();
+
+        if (mDarkTheme) {
+            setTheme(android.R.style.Theme_Holo);
+        } else {
+            setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);
+        }
+        setContentView(R.layout.activity_feed_rate);
 
         final Intent intent = getIntent();
 
@@ -129,6 +137,15 @@ public class FeedRateActivity extends Activity {
                 (TextView) findViewById(R.id.bladesFeed);
         final TextView mFeedRate =
                 (TextView) findViewById(R.id.feedRate);
+        final TextView mRpmText =
+                (TextView) findViewById(R.id.rpmBoxFeed);
+        final TextView mFeedText =
+                (TextView) findViewById(R.id.feedBox);
+        final TextView mBladesText =
+                (TextView) findViewById(R.id.bladesBoxFeed);
+        final TextView mFeedRateText =
+                (TextView) findViewById(R.id.feedRateBox);
+
         final String mRpmRpm =
                 intent.getStringExtra("RPM");
 
@@ -142,6 +159,17 @@ public class FeedRateActivity extends Activity {
             pvcSwitch.setChecked(false); // Don't use PVC data by default
         }
 
+        if (mDarkTheme) {
+            MainActivity.setShadows(mRpm);
+            MainActivity.setShadows(mFeedView);
+            MainActivity.setShadows(mBlades);
+            MainActivity.setShadows(mFeedRate);
+            MainActivity.setShadows(mRpmText);
+            MainActivity.setShadows(mFeedText);
+            MainActivity.setShadows(mBladesText);
+            MainActivity.setShadows(mFeedRateText);
+            MainActivity.setShadowsSwitch(pvcSwitch);
+        }
         mRpm.setText(mRpmRpm);       // Use the RPM from the previously calculated data
 
         changeMode(mMode);
@@ -186,8 +214,6 @@ public class FeedRateActivity extends Activity {
                 new Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int multiplier = getResources().getInteger(R.integer.multiplier_switch);
-
                         if (mRpm.getText() != null && !mRpm.getText().toString().equals("")) {
                             if (mFeedView.getText() != null && !mFeedView.getText().toString().equals("")) {
                                 if (mBlades.getText() != null && !mBlades.getText().toString().equals("")) {
@@ -199,7 +225,7 @@ public class FeedRateActivity extends Activity {
                                     double result = round(rpm * feed * blades, 2);
 
                                     if (pvcSwitch.isChecked()) {
-                                        result = multiplier * result;
+                                        result = mMultiplier * result;
                                     }
                                     mFeedRate.setText(Double.toString(result));
                                 } else {
@@ -249,6 +275,9 @@ public class FeedRateActivity extends Activity {
     protected void onRestart() {
         super.onRestart();
         getPreferences();
+        if (mDarkTheme != MainActivity.darkThemeStore) {
+            this.recreate();
+        }
         changeMode(mMode);
     }
 

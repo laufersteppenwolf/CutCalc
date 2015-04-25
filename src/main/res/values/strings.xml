@@ -55,5 +55,8 @@
     <string name="toast_add_rpm">Please add a RPM value!</string>
     <string name="toast_add_diameter">Please add a diameter value!</string>
     <string name="toast_add_cutting_speed">Please add a Cutting Speed value!</string>
+    <string name="pref_dark_theme">Use a dark theme</string>
+    <string name="pref_description_dark_theme">Switch to a dark theme. Requires restart of the application.</string>
+    <string name="pref_title_default_pvc_multiplier">Default PVC switch multiplier</string>
 
 </resources>

@@ -111,6 +111,8 @@ public class SettingsActivity extends PreferenceActivity {
         bindPreferenceSummaryToValue(findPreference("default_milling_blades"));
         bindPreferenceSummaryToValue(findPreference("default_turning_blades"));
         bindPreferenceSummaryToValue(findPreference("default_drilling_blades"));
+        bindPreferenceSummaryToValue(findPreference("default_pvc_multiplier_feed"));
+        bindPreferenceSummaryToValue(findPreference("default_pvc_multiplier_rpm"));
 
 //        bindPreferenceSummaryToValue(findPreference("example_list"));
     }
