@@ -24,7 +24,9 @@ public class FeedRateActivity extends Activity {
     public static final String DARK_THEME = "dark_theme";
     public static final String CHANGE_BACKGROUND = "change_background";
     public static final String PVC_DEFAULT = "pvc_default";
-    public static final String DEFAULT_FEED = "default_feed";
+    public static final String DEFAULT_FEED_MILLING = "default_feed_milling";
+    public static final String DEFAULT_FEED_TURNING = "default_feed_turning";
+    public static final String DEFAULT_FEED_DRILLING = "default_feed_drilling";
     public static final String DEFAULT_BLADES_MILLING = "default_milling_blades";
     public static final String DEFAULT_BLADES_TURNING = "default_turning_blades";
     public static final String DEFAULT_BLADES_DRILLING = "default_drilling_blades";
@@ -34,7 +36,9 @@ public class FeedRateActivity extends Activity {
     private Boolean mChangeBackground;
     private Boolean mPvcDefault;
 
-    private String mFeed;
+    private String mFeedMilling;
+    private String mFeedTurning;
+    private String mFeedDrilling;
     private String mBladesMilling;
     private String mBladesTurning;
     private String mBladesDrilling;
@@ -60,22 +64,23 @@ public class FeedRateActivity extends Activity {
 
         if (mode == 1) {
             mBlades.setText(mBladesDrilling);
+            mFeedView.setText(mFeedDrilling);
             if (mChangeBackground) {
                 mScrollView.setBackgroundResource(R.drawable.drill);
             }
         } else if (mode == 2) {
             mBlades.setText(mBladesTurning);
+            mFeedView.setText(mFeedTurning);
             if (mChangeBackground) {
                 mScrollView.setBackgroundResource(R.drawable.turning_chisel);
             }
         } else{
             mBlades.setText(mBladesMilling);
+            mFeedView.setText(mFeedMilling);
             if (mChangeBackground) {
                 mScrollView.setBackgroundResource(R.drawable.milling_cutter);
             }
         }
-
-        mFeedView.setText(mFeed);
         doCalc();
     }
 
@@ -102,7 +107,9 @@ public class FeedRateActivity extends Activity {
         mDarkTheme = myPreference.getBoolean(DARK_THEME, true);
         mChangeBackground = myPreference.getBoolean(CHANGE_BACKGROUND, true);
         mPvcDefault = myPreference.getBoolean(PVC_DEFAULT, false);
-        mFeed = myPreference.getString(DEFAULT_FEED, getString(R.string.string_default_feed));
+        mFeedMilling = myPreference.getString(DEFAULT_FEED_MILLING, getString(R.string.string_default_feed));
+        mFeedTurning = myPreference.getString(DEFAULT_FEED_TURNING, getString(R.string.string_default_feed));
+        mFeedDrilling = myPreference.getString(DEFAULT_FEED_DRILLING, getString(R.string.string_default_feed));
         mBladesMilling = myPreference.getString(DEFAULT_BLADES_MILLING, getString(R.string.string_default_blades_milling));
         mBladesTurning = myPreference.getString(DEFAULT_BLADES_TURNING, getString(R.string.string_default_blades_turning));
         mBladesDrilling = myPreference.getString(DEFAULT_BLADES_DRILLING, getString(R.string.string_default_blades_drilling));

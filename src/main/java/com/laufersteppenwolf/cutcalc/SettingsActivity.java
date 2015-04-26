@@ -107,7 +107,9 @@ public class SettingsActivity extends PreferenceActivity {
         bindPreferenceSummaryToValue(findPreference("default_milling_cuttingspeed"));
         bindPreferenceSummaryToValue(findPreference("default_turning_cuttingspeed"));
         bindPreferenceSummaryToValue(findPreference("default_drilling_cuttingspeed"));
-        bindPreferenceSummaryToValue(findPreference("default_feed"));
+        bindPreferenceSummaryToValue(findPreference("default_feed_milling"));
+        bindPreferenceSummaryToValue(findPreference("default_feed_turning"));
+        bindPreferenceSummaryToValue(findPreference("default_feed_drilling"));
         bindPreferenceSummaryToValue(findPreference("default_milling_blades"));
         bindPreferenceSummaryToValue(findPreference("default_turning_blades"));
         bindPreferenceSummaryToValue(findPreference("default_drilling_blades"));

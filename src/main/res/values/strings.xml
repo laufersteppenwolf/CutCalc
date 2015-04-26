@@ -58,5 +58,8 @@
     <string name="pref_dark_theme">Use a dark theme</string>
     <string name="pref_description_dark_theme">Switch to a dark theme</string>
     <string name="pref_title_default_pvc_multiplier">Default PVC switch multiplier</string>
+    <string name="pref_title_default_feed_milling">Default feed per blade for Milling</string>
+    <string name="pref_title_default_feed_turning">Default feed per blade for Turning</string>
+    <string name="pref_title_default_feed_drilling">Default feed per blade for Drilling</string>
 
 </resources>
