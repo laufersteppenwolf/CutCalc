@@ -1,25 +1,15 @@
 package com.laufersteppenwolf.cutcalc;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.UserManager;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,8 +17,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -38,13 +26,23 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Random;
 
+import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColor;
+import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColorHex;
+import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setTextColor;
+import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setTextColorHex;
+
 
 public class MainActivity extends Activity {
 
     public static final String LOG_TAG = "CutCalc";
 
+    public static final String DEFAULT = "default";
+    public static final String CUSTOM = "custom";
+
     public static final String DARK_THEME = "dark_theme";
     public static final String CHANGE_BACKGROUND = "change_background";
+    public static final String TEXT_COLOR = "text_color";
+    public static final String TEXT_COLOR_HEX = "color_hex_code";
     public static final String PVC_DEFAULT = "pvc_default";
     public static final String DEFAULT_VC_MILLING = "default_milling_cuttingspeed";
     public static final String DEFAULT_VC_TURNING = "default_turning_cuttingspeed";
@@ -59,12 +57,17 @@ public class MainActivity extends Activity {
     private String mVcMilling;
     private String mVcTurning;
     private String mVcDrilling;
+    private String mTextColor;
+    private String mTextColorCustom;
+    public static String textColorStore;
+    public static String textColorCustomStore;
 
     private int mMultiplier;
 
     public static int mMode = 0;  // 0 == Milling; 1 == Drilling; 2 == Turning
     public static int mMonkey = 0; //Monkey counter
 
+    private static Context mContext;
     Button buttonCalc;
 
     Random r = new Random();
@@ -133,6 +136,8 @@ public class MainActivity extends Activity {
         mVcMilling = myPreference.getString(DEFAULT_VC_MILLING, getString(R.string.string_vc_milling));
         mVcTurning = myPreference.getString(DEFAULT_VC_TURNING, getString(R.string.string_vc_turning));
         mVcDrilling = myPreference.getString(DEFAULT_VC_DRILLING, getString(R.string.string_vc_drilling));
+        mTextColor = myPreference.getString(TEXT_COLOR, DEFAULT);
+        mTextColorCustom = myPreference.getString(TEXT_COLOR_HEX, "#ffffffff");
         mMultiplier = Integer.parseInt(myPreference.getString(DEFAULT_MULTIPLIER, Integer.toString(getResources().getInteger(R.integer.multiplier_switch))));
     }
 
@@ -144,9 +149,14 @@ public class MainActivity extends Activity {
         s.setShadowLayer(4, 2, 2, Color.BLACK);
     }
 
+    public static Context getContext(){
+        return mContext;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         //Get preferences
         getPreferences();
 
@@ -200,7 +210,31 @@ public class MainActivity extends Activity {
             setShadowsSwitch(pvcSwitch);
         }
 
+        //Set Text Colors
+        if (mTextColor != DEFAULT) {
+            if (mTextColor.equals(CUSTOM)) {
+                Log.d(LOG_TAG, "Parsing custom hex Colors");
+                setTextColorHex(mDiameter, mTextColorCustom);
+                setTextColorHex(mVc, mTextColorCustom);
+                setTextColorHex(mRpm, mTextColorCustom);
+                setTextColorHex(mDiameterText, mTextColorCustom);
+                setTextColorHex(mVcText, mTextColorCustom);
+                setTextColorHex(mRpmText, mTextColorCustom);
+                setSwitchColorHex(pvcSwitch, mTextColorCustom);
+            } else {
+                setTextColor(mDiameter, mTextColor);
+                setTextColor(mVc, mTextColor);
+                setTextColor(mRpm, mTextColor);
+                setTextColor(mDiameterText, mTextColor);
+                setTextColor(mVcText, mTextColor);
+                setTextColor(mRpmText, mTextColor);
+                setSwitchColor(pvcSwitch, mTextColor);
+            }
+        }
+
         darkThemeStore = mDarkTheme;
+        textColorStore = mTextColor;
+        textColorCustomStore = mTextColorCustom;
 
         mDiameter.setOnClickListener(
                 new TextView.OnClickListener() {
@@ -315,7 +349,9 @@ public class MainActivity extends Activity {
         super.onRestart();
         getPreferences();
 
-        if (mDarkTheme != darkThemeStore) {
+        if ((mDarkTheme != darkThemeStore) ||
+                (mTextColor != textColorStore) ||
+                (mTextColorCustom != textColorCustomStore)) {
             this.recreate();
         }
         changeMode(mMode);

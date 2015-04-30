@@ -24,7 +24,7 @@
     <string name="action_features">Features</string>
     <string name="action_features_rpm">RPM</string>
 
-    <string name="string_default_blades_drilling" translatable="false">2</string>
+    <string name="string_default_blades_drilling" translatable="false">1</string>
     <string name="string_default_blades_milling" translatable="false">4</string>
     <string name="string_default_blades_turning" translatable="false">1</string>
     <string name="string_default_feed" translatable="false">0.1</string>
@@ -61,5 +61,11 @@
     <string name="pref_title_default_feed_milling">Default feed per blade for Milling</string>
     <string name="pref_title_default_feed_turning">Default feed per blade for Turning</string>
     <string name="pref_title_default_feed_drilling">Default feed per blade for Drilling</string>
+    <string name="pref_title_text_color">Text Color</string>
+    <string name="title_activity_color">ColorActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="pref_title_color_hex_code">Custom Color hex code</string>
+    <string name="color">Color</string>
 
 </resources>

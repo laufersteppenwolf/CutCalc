@@ -128,16 +128,27 @@
         android:maxLines="1" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/color">
     <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
          dismiss it. -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
-    <!--ListPreference
-        android:key="example_list"
-        android:title="@string/pref_title_add_friends_to_messages"
-        android:defaultValue="-1"
-        android:entries="@array/pref_example_list_titles"
-        android:entryValues="@array/pref_example_list_values"
+    <ListPreference
+        android:key="text_color"
+        android:title="@string/pref_title_text_color"
+        android:entries="@array/pref_text_color_titles"
+        android:entryValues="@array/pref_text_color_values"
         android:negativeButtonText="@null"
-        android:positiveButtonText="@null" /-->
+        android:positiveButtonText="@null" />
+
+    <EditTextPreference
+        android:key="color_hex_code"
+        android:title="@string/pref_title_color_hex_code"
+        android:defaultValue="@color/white"
+        android:selectAllOnFocus="true"
+        android:inputType="text"
+        android:singleLine="true"
+        android:maxLines="1" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

@@ -27,10 +27,14 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.laufersteppenwolf.cutcalc.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ColorActivity"
+            android:label="@string/title_activity_color" >
         </activity>
     </application>
 

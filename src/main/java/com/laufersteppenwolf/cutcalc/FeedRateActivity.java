@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,8 +19,18 @@ import android.widget.Toast;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColor;
+import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColorHex;
+import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setTextColor;
+import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setTextColorHex;
+
 
 public class FeedRateActivity extends Activity {
+
+    public static final String LOG_TAG = "cutcalc";
+
+    public static final String DEFAULT = "default";
+    public static final String CUSTOM = "custom";
 
     public static final String DARK_THEME = "dark_theme";
     public static final String CHANGE_BACKGROUND = "change_background";
@@ -30,6 +41,8 @@ public class FeedRateActivity extends Activity {
     public static final String DEFAULT_BLADES_MILLING = "default_milling_blades";
     public static final String DEFAULT_BLADES_TURNING = "default_turning_blades";
     public static final String DEFAULT_BLADES_DRILLING = "default_drilling_blades";
+    public static final String TEXT_COLOR = "text_color";
+    public static final String TEXT_COLOR_HEX = "color_hex_code";
     public static final String DEFAULT_MULTIPLIER = "default_pvc_multiplier_feed";
 
     private Boolean mDarkTheme;
@@ -42,6 +55,8 @@ public class FeedRateActivity extends Activity {
     private String mBladesMilling;
     private String mBladesTurning;
     private String mBladesDrilling;
+    private String mTextColor;
+    private String mTextColorCustom;
 
     private int mMultiplier;
 
@@ -113,6 +128,8 @@ public class FeedRateActivity extends Activity {
         mBladesMilling = myPreference.getString(DEFAULT_BLADES_MILLING, getString(R.string.string_default_blades_milling));
         mBladesTurning = myPreference.getString(DEFAULT_BLADES_TURNING, getString(R.string.string_default_blades_turning));
         mBladesDrilling = myPreference.getString(DEFAULT_BLADES_DRILLING, getString(R.string.string_default_blades_drilling));
+        mTextColor = myPreference.getString(TEXT_COLOR, DEFAULT);
+        mTextColorCustom = myPreference.getString(TEXT_COLOR_HEX, "#ffffffff");
         mMultiplier = Integer.parseInt(myPreference.getString(DEFAULT_MULTIPLIER, Integer.toString(getResources().getInteger(R.integer.multiplier_switch))));
     }
 
@@ -177,6 +194,32 @@ public class FeedRateActivity extends Activity {
             MainActivity.setShadows(mFeedRateText);
             MainActivity.setShadowsSwitch(pvcSwitch);
         }
+
+        if (mTextColor != DEFAULT) {
+            if (mTextColor.equals(CUSTOM)) {
+                Log.d(LOG_TAG, "Parsing custom hex Colors");
+                setTextColorHex(mRpm, mTextColorCustom);
+                setTextColorHex(mFeedView, mTextColorCustom);
+                setTextColorHex(mBlades, mTextColorCustom);
+                setTextColorHex(mFeedRate, mTextColorCustom);
+                setTextColorHex(mRpmText, mTextColorCustom);
+                setTextColorHex(mFeedText, mTextColorCustom);
+                setTextColorHex(mBladesText, mTextColorCustom);
+                setTextColorHex(mFeedRateText, mTextColorCustom);
+                setSwitchColorHex(pvcSwitch, mTextColorCustom);
+            } else {
+                setTextColor(mRpm, mTextColor);
+                setTextColor(mFeedView, mTextColor);
+                setTextColor(mBlades, mTextColor);
+                setTextColor(mFeedRate, mTextColor);
+                setTextColor(mRpmText, mTextColor);
+                setTextColor(mFeedText, mTextColor);
+                setTextColor(mBladesText, mTextColor);
+                setTextColor(mFeedRateText, mTextColor);
+                setSwitchColor(pvcSwitch, mTextColor);
+            }
+        }
+
         mRpm.setText(mRpmRpm);       // Use the RPM from the previously calculated data
 
         changeMode(mMode);
@@ -241,15 +284,17 @@ public class FeedRateActivity extends Activity {
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), getString(R.string.toast_add_feed),
-                                        Toast.LENGTH_SHORT).show();                            }
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Toast.makeText(getApplicationContext(), getString(R.string.toast_add_rpm),
-                                    Toast.LENGTH_SHORT).show();                        }
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
         );
         buttonDrilling.setOnClickListener(
-                new Button.OnClickListener()  {
+                new Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mMode = 1;
@@ -282,7 +327,9 @@ public class FeedRateActivity extends Activity {
     protected void onRestart() {
         super.onRestart();
         getPreferences();
-        if (mDarkTheme != MainActivity.darkThemeStore) {
+        if ((mDarkTheme != MainActivity.darkThemeStore) ||
+                (mTextColor != MainActivity.textColorStore) ||
+                (mTextColorCustom != MainActivity.textColorCustomStore)) {
             this.recreate();
         }
         changeMode(mMode);
