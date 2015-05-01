@@ -111,6 +111,8 @@ public class SettingsActivity extends PreferenceActivity {
 
         bindPreferenceSummaryToValue(findPreference("text_color"));
         bindPreferenceSummaryToValue(findPreference("color_hex_code"));
+
+        bindPreferenceSummaryToValue(findPreference("version"));
     }
 
     /**

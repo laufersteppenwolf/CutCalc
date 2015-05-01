@@ -48,6 +48,7 @@ public class MainActivity extends Activity {
     public static final String DEFAULT_VC_TURNING = "default_turning_cuttingspeed";
     public static final String DEFAULT_VC_DRILLING = "default_drilling_cuttingspeed";
     public static final String DEFAULT_MULTIPLIER = "default_pvc_multiplier_rpm";
+    public static final String VERSION = "version";
 
     private Boolean mChangeBackground;
     private Boolean mPvcDefault;
@@ -127,6 +128,11 @@ public class MainActivity extends Activity {
         return app_installed;
     }
 
+    public void setPreferences() {
+        SharedPreferences.Editor myPreferenceEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        myPreferenceEditor.putString(VERSION, BuildConfig.VERSION_NAME);
+        myPreferenceEditor.commit();
+    }
     public void getPreferences() {
         //Get preferences
         SharedPreferences myPreference= PreferenceManager.getDefaultSharedPreferences(this);
@@ -157,7 +163,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        //Get preferences
+        //Set all variable preferences
+        setPreferences();
+        //Get user preferences
         getPreferences();
 
         if (mDarkTheme) {
