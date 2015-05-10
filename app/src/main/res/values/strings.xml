@@ -75,5 +75,6 @@
     <string name="xda_thread">View XDA Thread</string>
     <string name="github">View Sourcecode on GitHub</string>
     <string name="toast_invalid_colorcode">Hex Color code is not valid! Falling back to default color.</string>
+    <string name="pref_title_background_color">Background Color</string>
 
 </resources>

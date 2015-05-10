@@ -110,6 +110,7 @@ public class SettingsActivity extends PreferenceActivity {
         bindPreferenceSummaryToValue(findPreference("default_pvc_multiplier_rpm"));
 
         bindPreferenceSummaryToValue(findPreference("text_color"));
+        bindPreferenceSummaryToValue(findPreference("background_color"));
         bindPreferenceSummaryToValue(findPreference("color_hex_code"));
 
         bindPreferenceSummaryToValue(findPreference("version"));

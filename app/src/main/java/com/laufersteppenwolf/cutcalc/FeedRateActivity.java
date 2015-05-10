@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.getColorCode;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColor;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColorHex;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setTextColor;
@@ -31,9 +33,11 @@ public class FeedRateActivity extends Activity {
 
     public static final String DEFAULT = "default";
     public static final String CUSTOM = "custom";
+    public static final String TRANSPARENT = "transparent";
 
     public static final String DARK_THEME = "dark_theme";
     public static final String CHANGE_BACKGROUND = "change_background";
+    public static final String BACKGROUND_COLOR = "background_color";
     public static final String PVC_DEFAULT = "pvc_default";
     public static final String DEFAULT_FEED_MILLING = "default_feed_milling";
     public static final String DEFAULT_FEED_TURNING = "default_feed_turning";
@@ -57,6 +61,7 @@ public class FeedRateActivity extends Activity {
     private String mBladesDrilling;
     private String mTextColor;
     private String mTextColorCustom;
+    private String mBackgroundColor;
 
     private int mMultiplier;
 
@@ -130,6 +135,7 @@ public class FeedRateActivity extends Activity {
         mBladesDrilling = myPreference.getString(DEFAULT_BLADES_DRILLING, getString(R.string.string_default_blades_drilling));
         mTextColor = myPreference.getString(TEXT_COLOR, DEFAULT);
         mTextColorCustom = myPreference.getString(TEXT_COLOR_HEX, "#ffffffff");
+        mBackgroundColor = myPreference.getString(BACKGROUND_COLOR, DEFAULT);
         mMultiplier = Integer.parseInt(myPreference.getString(DEFAULT_MULTIPLIER, Integer.toString(getResources().getInteger(R.integer.multiplier_switch))));
     }
 
@@ -140,9 +146,17 @@ public class FeedRateActivity extends Activity {
         getPreferences();
 
         if (mDarkTheme) {
-            setTheme(android.R.style.Theme_Holo);
+            if (!mBackgroundColor.equals(TRANSPARENT)) {
+                setTheme(android.R.style.Theme_Holo);
+            } else {
+                setTheme(android.R.style.Theme_Holo_Wallpaper);
+            }
         } else {
-            setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);
+            if (!mBackgroundColor.equals(TRANSPARENT)) {
+                setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);
+            } else {
+                setTheme(android.R.style.Theme_Holo_Wallpaper);
+            }
         }
         setContentView(R.layout.activity_feed_rate);
 
@@ -172,6 +186,9 @@ public class FeedRateActivity extends Activity {
 
         final String mRpmRpm =
                 intent.getStringExtra("RPM");
+
+        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutFeed);
+
 
         buttonCalc = (Button) findViewById(R.id.buttonCalcFeed);
 
@@ -218,6 +235,12 @@ public class FeedRateActivity extends Activity {
                 setTextColor(mFeedRateText, mTextColor);
                 setSwitchColor(pvcSwitch, mTextColor);
             }
+        }
+
+        if ((!mBackgroundColor.equals(DEFAULT)) &&
+                (!mBackgroundColor.equals(TRANSPARENT))) {
+            Log.d(LOG_TAG, "Background Color: " + mBackgroundColor);
+            linearLayout.setBackgroundColor(getColorCode(mBackgroundColor));
         }
 
         mRpm.setText(mRpmRpm);       // Use the RPM from the previously calculated data
@@ -327,9 +350,10 @@ public class FeedRateActivity extends Activity {
     protected void onRestart() {
         super.onRestart();
         getPreferences();
-        if ((mDarkTheme != MainActivity.darkThemeStore) ||
-                (mTextColor != MainActivity.textColorStore) ||
-                (mTextColorCustom != MainActivity.textColorCustomStore)) {
+        if ((!mDarkTheme.equals(MainActivity.darkThemeStore)) ||
+                (!mTextColor.equals(MainActivity.textColorStore)) ||
+                (!mTextColorCustom.equals(MainActivity.textColorCustomStore)) ||
+                (!mBackgroundColor.equals(MainActivity.backgroundColorStore))) {
             this.recreate();
         }
         changeMode(mMode);

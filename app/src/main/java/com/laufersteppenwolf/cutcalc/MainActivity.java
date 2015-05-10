@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Random;
 
+import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.getColorCode;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColor;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColorHex;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setTextColor;
@@ -38,9 +40,11 @@ public class MainActivity extends Activity {
 
     public static final String DEFAULT = "default";
     public static final String CUSTOM = "custom";
+    public static final String TRANSPARENT = "transparent";
 
     public static final String DARK_THEME = "dark_theme";
     public static final String CHANGE_BACKGROUND = "change_background";
+    public static final String BACKGROUND_COLOR = "background_color";
     public static final String TEXT_COLOR = "text_color";
     public static final String TEXT_COLOR_HEX = "color_hex_code";
     public static final String PVC_DEFAULT = "pvc_default";
@@ -52,7 +56,7 @@ public class MainActivity extends Activity {
 
     private Boolean mChangeBackground;
     private Boolean mPvcDefault;
-    private Boolean mDarkTheme;
+    public static Boolean mDarkTheme;
     public static Boolean darkThemeStore;
 
     private String mVcMilling;
@@ -60,8 +64,10 @@ public class MainActivity extends Activity {
     private String mVcDrilling;
     private String mTextColor;
     private String mTextColorCustom;
+    public static String mBackgroundColor;
     public static String textColorStore;
     public static String textColorCustomStore;
+    public static String backgroundColorStore;
 
     private int mMultiplier;
 
@@ -144,6 +150,7 @@ public class MainActivity extends Activity {
         mVcDrilling = myPreference.getString(DEFAULT_VC_DRILLING, getString(R.string.string_vc_drilling));
         mTextColor = myPreference.getString(TEXT_COLOR, DEFAULT);
         mTextColorCustom = myPreference.getString(TEXT_COLOR_HEX, "#ffffffff");
+        mBackgroundColor = myPreference.getString(BACKGROUND_COLOR, DEFAULT);
         mMultiplier = Integer.parseInt(myPreference.getString(DEFAULT_MULTIPLIER, Integer.toString(getResources().getInteger(R.integer.multiplier_switch))));
     }
 
@@ -169,9 +176,17 @@ public class MainActivity extends Activity {
         getPreferences();
 
         if (mDarkTheme) {
-            setTheme(android.R.style.Theme_Holo);
+            if (!mBackgroundColor.equals(TRANSPARENT)) {
+                setTheme(android.R.style.Theme_Holo);
+            } else {
+                setTheme(android.R.style.Theme_Holo_Wallpaper);
+            }
         } else {
-            setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);
+            if (!mBackgroundColor.equals(TRANSPARENT)) {
+                setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);
+            } else {
+                setTheme(android.R.style.Theme_Holo_Wallpaper);
+            }
         }
         setContentView(R.layout.activity_main);
 
@@ -200,6 +215,8 @@ public class MainActivity extends Activity {
         final Animation shakeX = AnimationUtils.loadAnimation(this, R.anim.shake_x);
 
         final Drawable defaultBackground = mDiameter.getBackground();
+
+        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
 
         if (mPvcDefault) {
             pvcSwitch.setChecked(true); // Use PVC data by default
@@ -240,9 +257,16 @@ public class MainActivity extends Activity {
             }
         }
 
+        if ((!mBackgroundColor.equals(DEFAULT)) &&
+                (!mBackgroundColor.equals(TRANSPARENT))) {
+            Log.d(LOG_TAG, "Background Color: " + mBackgroundColor);
+            linearLayout.setBackgroundColor(getColorCode(mBackgroundColor));
+        }
+
         darkThemeStore = mDarkTheme;
         textColorStore = mTextColor;
         textColorCustomStore = mTextColorCustom;
+        backgroundColorStore = mBackgroundColor;
 
         mDiameter.setOnClickListener(
                 new TextView.OnClickListener() {
@@ -357,9 +381,10 @@ public class MainActivity extends Activity {
         super.onRestart();
         getPreferences();
 
-        if ((mDarkTheme != darkThemeStore) ||
-                (mTextColor != textColorStore) ||
-                (mTextColorCustom != textColorCustomStore)) {
+        if ((!mDarkTheme.equals(darkThemeStore)) ||
+                (!mTextColor.equals(textColorStore)) ||
+                (!mTextColorCustom.equals(textColorCustomStore)) ||
+                (!mBackgroundColor.equals(backgroundColorStore))) {
             this.recreate();
         }
         changeMode(mMode);

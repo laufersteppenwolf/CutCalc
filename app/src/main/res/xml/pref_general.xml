@@ -141,6 +141,14 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null" />
 
+    <ListPreference
+        android:key="background_color"
+        android:title="@string/pref_title_background_color"
+        android:entries="@array/pref_background_color_titles"
+        android:entryValues="@array/pref_background_color_values"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />
+
     <EditTextPreference
         android:key="color_hex_code"
         android:title="@string/pref_title_color_hex_code"

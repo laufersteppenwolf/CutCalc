@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Text Color -->
     <string-array name="pref_text_color_titles">
         <item>Default</item>
         <item>Custom</item>
@@ -11,11 +12,42 @@
         <item>Yellow</item>
         <item>Green</item>
         <item>Bright Green</item>
+        <item>Transparent</item>
     </string-array>
 
     <string-array name="pref_text_color_values">
         <item>default</item>
         <item>custom</item>
+        <item>black</item>
+        <item>white</item>
+        <item>red</item>
+        <item>blue</item>
+        <item>bright_blue</item>
+        <item>yellow</item>
+        <item>green</item>
+        <item>bright_green</item>
+        <item>transparent</item>
+    </string-array>
+
+    <!-- Background Color -->
+    <string-array name="pref_background_color_titles">
+        <item>Default</item>
+        <item>Custom</item>
+        <item>Open the Curtains!</item>
+        <item>Black</item>
+        <item>White</item>
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Bright Blue</item>
+        <item>Yellow</item>
+        <item>Green</item>
+        <item>Bright Green</item>
+    </string-array>
+
+    <string-array name="pref_background_color_values">
+        <item>default</item>
+        <item>custom</item>
+        <item>transparent</item>
         <item>black</item>
         <item>white</item>
         <item>red</item>

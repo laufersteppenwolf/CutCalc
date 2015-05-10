@@ -24,6 +24,7 @@ public class ColorActivity extends MainActivity {
     private static final String YELLOW = "yellow";
     private static final String GREEN = "green";
     private static final String BRIGHT_GREEN = "bright_green";
+    private static final String TRANSPARENT = "transparent";
 
     private static final String[] ALLOWED_CHARS = new String[] {"#", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
     private static final String[] DISALLOWED_CHARS = new String[] {"g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "!", "?", "ß", "+", "-", ",", ".", "§", "%", "&", "/", "(", ")", "=", "'", "~", "_", ";", ":", "<", ">", "|", "^", "°"};
@@ -51,6 +52,8 @@ public class ColorActivity extends MainActivity {
                 return mContext.getResources().getColor(R.color.green);
             case BRIGHT_GREEN:
                 return mContext.getResources().getColor(R.color.bright_green);
+            case TRANSPARENT:
+                return mContext.getResources().getColor(R.color.transparent);
         }
         return -1;
     }
@@ -60,20 +63,20 @@ public class ColorActivity extends MainActivity {
 
         switch (color.length()) {
             case 6:
-                if (color.contains("#"))
+                if (color.startsWith("#"))
                     return false; //too few
                 break;
             case 7:
-                if (color.contains("#"))
+                if (color.startsWith("#"))
                     break;
                 Log.e(LOG_TAG, "Too many!");
                 return false; //too many
             case 8:
-                if (color.contains("#"))
+                if (color.startsWith("#"))
                     return false; //too few
                 break;
             case 9:
-                if (color.contains("#"))
+                if (color.startsWith("#"))
                     break;
                 Log.e(LOG_TAG, "Too many!");
                 return false;
