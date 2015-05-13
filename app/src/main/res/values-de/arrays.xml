@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Text Color -->
+    <string-array name="pref_text_color_titles">
+        <item>Standard</item>
+        <item>Benutzerdefiniert</item>
+        <item>Schwarz</item>
+        <item>Weiß</item>
+        <item>Rot</item>
+        <item>Blau</item>
+        <item>Hellblau</item>
+        <item>Gelb</item>
+        <item>Grün</item>
+        <item>Hellgrün</item>
+        <item>Transparent</item>
+    </string-array>
+
+    <!-- Background Color -->
+    <string-array name="pref_background_color_titles">
+        <item>Standard</item>
+        <item>Benutzerdefiniert</item>
+        <item>Open the Curtains!</item>
+        <item>Schwarz</item>
+        <item>Weiß</item>
+        <item>Rot</item>
+        <item>Blau</item>
+        <item>Hellblau</item>
+        <item>Gelb</item>
+        <item>Grün</item>
+        <item>Hellgrün</item>
+    </string-array>
+
+</resources>

@@ -38,4 +38,22 @@
     <string name="toast_add_diameter">Bitte Durchmesser angeben!</string>
     <string name="toast_add_feed">Bitte Zustellung angeben!</string>
     <string name="toast_add_rpm">Bitte Drehzahl angeben!</string>
+    <string name="about">Über</string>
+    <string name="author">Autor</string>
+    <string name="color">Farbe</string>
+    <string name="github">Quellcode auf GitHub ansehen</string>
+    <string name="hello_world">Hallo Welt</string>
+    <string name="pref_dark_theme">Dunkles Thema verwenden</string>
+    <string name="pref_description_dark_theme">Zu einem dunklen Thema wechseln</string>
+    <string name="pref_title_background_color">Hintergrundfarbe</string>
+    <string name="pref_title_color_hex_code">Benutzerdefinierter Hex-Farbcode</string>
+    <string name="pref_title_default_feed_drilling">Zustellung pro Schneide beim Bohren</string>
+    <string name="pref_title_default_feed_milling">Zustellung pro Schneide beim Fräsen</string>
+    <string name="pref_title_default_feed_turning">Zustellung pro Schneide beim Drehen</string>
+    <string name="pref_title_default_pvc_multiplier">PVC-Modus Multiplikator</string>
+    <string name="pref_title_text_color">Textfarbe</string>
+    <string name="toast_invalid_colorcode">Hex-Farbcode ist nicht gültig! Benutze Standardfarbe...</string>
+    <string name="unknown">Unbekannt</string>
+    <string name="version">Version</string>
+    <string name="xda_thread">XDA-Thread besuchen</string>
 </resources>
