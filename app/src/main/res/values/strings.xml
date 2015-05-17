@@ -76,5 +76,7 @@
     <string name="github">View Sourcecode on GitHub</string>
     <string name="toast_invalid_colorcode">Hex Color code is not valid! Falling back to default color.</string>
     <string name="pref_title_background_color">Background Color</string>
+    <string name="pref_description_no_background">Do not show a background image</string>
+    <string name="pref_no_background">No Background Image</string>
 
 </resources>

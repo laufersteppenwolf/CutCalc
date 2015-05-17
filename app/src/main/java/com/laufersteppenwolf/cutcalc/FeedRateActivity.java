@@ -37,6 +37,7 @@ public class FeedRateActivity extends Activity {
 
     public static final String DARK_THEME = "dark_theme";
     public static final String CHANGE_BACKGROUND = "change_background";
+    public static final String NO_BACKGROUND = "no_background";
     public static final String BACKGROUND_COLOR = "background_color";
     public static final String PVC_DEFAULT = "pvc_default";
     public static final String DEFAULT_FEED_MILLING = "default_feed_milling";
@@ -51,6 +52,7 @@ public class FeedRateActivity extends Activity {
 
     private Boolean mDarkTheme;
     private Boolean mChangeBackground;
+    private Boolean mNoBackground;
     private Boolean mPvcDefault;
 
     private String mFeedMilling;
@@ -70,6 +72,8 @@ public class FeedRateActivity extends Activity {
     private TextView mFeedView;
     private Button buttonCalc;
 
+    private ScrollView mScrollView;
+
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
@@ -85,19 +89,19 @@ public class FeedRateActivity extends Activity {
         if (mode == 1) {
             mBlades.setText(mBladesDrilling);
             mFeedView.setText(mFeedDrilling);
-            if (mChangeBackground) {
+            if (mChangeBackground && !mNoBackground) {
                 mScrollView.setBackgroundResource(R.drawable.drill);
             }
         } else if (mode == 2) {
             mBlades.setText(mBladesTurning);
             mFeedView.setText(mFeedTurning);
-            if (mChangeBackground) {
+            if (mChangeBackground && !mNoBackground) {
                 mScrollView.setBackgroundResource(R.drawable.turning_chisel);
             }
         } else{
             mBlades.setText(mBladesMilling);
             mFeedView.setText(mFeedMilling);
-            if (mChangeBackground) {
+            if (mChangeBackground && !mNoBackground) {
                 mScrollView.setBackgroundResource(R.drawable.milling_cutter);
             }
         }
@@ -126,6 +130,7 @@ public class FeedRateActivity extends Activity {
         SharedPreferences myPreference= PreferenceManager.getDefaultSharedPreferences(this);
         mDarkTheme = myPreference.getBoolean(DARK_THEME, true);
         mChangeBackground = myPreference.getBoolean(CHANGE_BACKGROUND, true);
+        mNoBackground = myPreference.getBoolean(NO_BACKGROUND, false);
         mPvcDefault = myPreference.getBoolean(PVC_DEFAULT, false);
         mFeedMilling = myPreference.getString(DEFAULT_FEED_MILLING, getString(R.string.string_default_feed));
         mFeedTurning = myPreference.getString(DEFAULT_FEED_TURNING, getString(R.string.string_default_feed));
@@ -191,6 +196,7 @@ public class FeedRateActivity extends Activity {
 
 
         buttonCalc = (Button) findViewById(R.id.buttonCalcFeed);
+        mScrollView = (ScrollView) findViewById(R.id.scrollViewFeed);
 
         mMode = intent.getIntExtra("Mode", 0);
 
@@ -241,6 +247,10 @@ public class FeedRateActivity extends Activity {
                 (!mBackgroundColor.equals(TRANSPARENT))) {
             Log.d(LOG_TAG, "Background Color: " + mBackgroundColor);
             linearLayout.setBackgroundColor(getColorCode(mBackgroundColor));
+        }
+
+        if (!mNoBackground) {
+            mScrollView.setBackgroundResource(R.drawable.milling_cutter);
         }
 
         mRpm.setText(mRpmRpm);       // Use the RPM from the previously calculated data
@@ -353,7 +363,8 @@ public class FeedRateActivity extends Activity {
         if ((!mDarkTheme.equals(MainActivity.darkThemeStore)) ||
                 (!mTextColor.equals(MainActivity.textColorStore)) ||
                 (!mTextColorCustom.equals(MainActivity.textColorCustomStore)) ||
-                (!mBackgroundColor.equals(MainActivity.backgroundColorStore))) {
+                (!mBackgroundColor.equals(MainActivity.backgroundColorStore)) ||
+                (!mNoBackground.equals(MainActivity.noBackgroundStore))) {
             this.recreate();
         }
         changeMode(mMode);

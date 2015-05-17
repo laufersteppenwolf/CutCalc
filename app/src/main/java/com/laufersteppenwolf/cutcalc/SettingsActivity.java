@@ -2,6 +2,7 @@ package com.laufersteppenwolf.cutcalc;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -93,6 +94,27 @@ public class SettingsActivity extends PreferenceActivity {
 
         // Add 'general' preferences.
         addPreferencesFromResource(R.xml.pref_general);
+
+        final Preference myPref = (Preference) findPreference("no_background");
+        final SharedPreferences myPreference = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContext());
+        final Preference changeBackground = (Preference) findPreference("change_background");
+
+        if (myPreference.getBoolean("no_background", false)) {
+            changeBackground.setEnabled(false);
+        }
+
+        myPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                Boolean isChecked = myPreference.getBoolean("no_background", false);
+                if (isChecked) {
+                    changeBackground.setEnabled(true);
+                } else {
+                    changeBackground.setEnabled(false);
+                }
+                return true;
+            }
+        });
 
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated

@@ -10,6 +10,12 @@
         android:defaultValue="true" />
 
     <CheckBoxPreference
+        android:key="no_background"
+        android:title="@string/pref_no_background"
+        android:summary="@string/pref_description_no_background"
+        android:defaultValue="false" />
+
+    <CheckBoxPreference
         android:key="change_background"
         android:title="@string/pref_change_background"
         android:summary="@string/pref_description_change_background"

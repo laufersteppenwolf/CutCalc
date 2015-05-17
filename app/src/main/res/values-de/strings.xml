@@ -56,4 +56,6 @@
     <string name="unknown">Unbekannt</string>
     <string name="version">Version</string>
     <string name="xda_thread">XDA-Thread besuchen</string>
+    <string name="pref_description_no_background">Zeige kein Hintergrundbild</string>
+    <string name="pref_no_background">Kein Hintergrundbild</string>
 </resources>

@@ -8,8 +8,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/scrollView"
-        android:background="@drawable/milling_cutter">
+        android:id="@+id/scrollView">
 
 <RelativeLayout
     android:layout_width="match_parent"

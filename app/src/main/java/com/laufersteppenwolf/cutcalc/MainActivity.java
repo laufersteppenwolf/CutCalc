@@ -44,6 +44,7 @@ public class MainActivity extends Activity {
 
     public static final String DARK_THEME = "dark_theme";
     public static final String CHANGE_BACKGROUND = "change_background";
+    public static final String NO_BACKGROUND = "no_background";
     public static final String BACKGROUND_COLOR = "background_color";
     public static final String TEXT_COLOR = "text_color";
     public static final String TEXT_COLOR_HEX = "color_hex_code";
@@ -55,9 +56,11 @@ public class MainActivity extends Activity {
     public static final String VERSION = "version";
 
     private Boolean mChangeBackground;
+    private Boolean mNoBackground;
     private Boolean mPvcDefault;
     public static Boolean mDarkTheme;
     public static Boolean darkThemeStore;
+    public static Boolean noBackgroundStore;
 
     private String mVcMilling;
     private String mVcTurning;
@@ -80,6 +83,9 @@ public class MainActivity extends Activity {
     Random r = new Random();
     public int randomCount = r.nextInt(20 - 7) + 7;
 
+    private ScrollView mScrollView;
+
+
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
@@ -100,17 +106,17 @@ public class MainActivity extends Activity {
 
         if (mode == 1) {
             mVc.setText(mVcDrilling);
-            if (mChangeBackground) {
+            if (mChangeBackground && !mNoBackground) {
                 mScrollView.setBackgroundResource(R.drawable.drill);
             }
         } else if (mode == 2) {
             mVc.setText(mVcTurning);
-            if (mChangeBackground) {
+            if (mChangeBackground && !mNoBackground) {
                 mScrollView.setBackgroundResource(R.drawable.turning_chisel);
             }
         } else{
             mVc.setText(mVcMilling);
-            if (mChangeBackground) {
+            if (mChangeBackground && !mNoBackground) {
                 mScrollView.setBackgroundResource(R.drawable.milling_cutter);
             }
         }
@@ -144,6 +150,7 @@ public class MainActivity extends Activity {
         SharedPreferences myPreference= PreferenceManager.getDefaultSharedPreferences(this);
         mDarkTheme = myPreference.getBoolean(DARK_THEME, true);
         mChangeBackground = myPreference.getBoolean(CHANGE_BACKGROUND, true);
+        mNoBackground = myPreference.getBoolean(NO_BACKGROUND, false);
         mPvcDefault = myPreference.getBoolean(PVC_DEFAULT, false);
         mVcMilling = myPreference.getString(DEFAULT_VC_MILLING, getString(R.string.string_vc_milling));
         mVcTurning = myPreference.getString(DEFAULT_VC_TURNING, getString(R.string.string_vc_turning));
@@ -211,6 +218,7 @@ public class MainActivity extends Activity {
                 (TextView) findViewById(R.id.rpmBox);
 
         buttonCalc = (Button) findViewById(R.id.buttonCalc);
+        mScrollView = (ScrollView) findViewById(R.id.scrollView);
 
         final Animation shakeX = AnimationUtils.loadAnimation(this, R.anim.shake_x);
 
@@ -263,6 +271,11 @@ public class MainActivity extends Activity {
             linearLayout.setBackgroundColor(getColorCode(mBackgroundColor));
         }
 
+        if (!mNoBackground) {
+            mScrollView.setBackgroundResource(R.drawable.milling_cutter);
+        }
+
+        noBackgroundStore = mNoBackground;
         darkThemeStore = mDarkTheme;
         textColorStore = mTextColor;
         textColorCustomStore = mTextColorCustom;
@@ -384,7 +397,8 @@ public class MainActivity extends Activity {
         if ((!mDarkTheme.equals(darkThemeStore)) ||
                 (!mTextColor.equals(textColorStore)) ||
                 (!mTextColorCustom.equals(textColorCustomStore)) ||
-                (!mBackgroundColor.equals(backgroundColorStore))) {
+                (!mBackgroundColor.equals(backgroundColorStore)) ||
+                (!mNoBackground.equals(noBackgroundStore))) {
             this.recreate();
         }
         changeMode(mMode);
