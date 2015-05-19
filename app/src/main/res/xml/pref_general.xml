@@ -144,6 +144,7 @@
         android:title="@string/pref_title_text_color"
         android:entries="@array/pref_text_color_titles"
         android:entryValues="@array/pref_text_color_values"
+        android:defaultValue="default"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null" />
 
@@ -152,6 +153,7 @@
         android:title="@string/pref_title_background_color"
         android:entries="@array/pref_background_color_titles"
         android:entryValues="@array/pref_background_color_values"
+        android:defaultValue="default"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null" />
 
