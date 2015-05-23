@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.media.MediaActionSound;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -11,7 +12,10 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.List;
@@ -27,7 +31,7 @@ import java.util.List;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     /**
      * Determines whether to always show the simplified settings UI, where
      * settings are presented in a single list. When false, settings are shown
@@ -35,6 +39,17 @@ public class SettingsActivity extends PreferenceActivity {
      * shown on tablets.
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = true;
+
+    public static final String LOG_TAG = MainActivity.LOG_TAG;
+
+    public static final String DEFAULT = "default";
+    public static final String CUSTOM = "custom";
+    public static final String TEXT_COLOR = "text_color";
+    public static final String BACKGROUND_COLOR = "background_color";
+    public static final String COLOR_HEX_CODE = "color_hex_code";
+
+    static SharedPreferences myPreference;
+    static Preference hexCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +111,21 @@ public class SettingsActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.pref_general);
 
         final Preference myPref = (Preference) findPreference("no_background");
-        final SharedPreferences myPreference = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContext());
+        myPreference = PreferenceManager.getDefaultSharedPreferences(this);
         final Preference changeBackground = (Preference) findPreference("change_background");
+        hexCode = (Preference) findPreference("color_hex_code");
+
+        myPreference.registerOnSharedPreferenceChangeListener(this);
 
         if (myPreference.getBoolean("no_background", false)) {
             changeBackground.setEnabled(false);
+        }
+
+        if (myPreference.getString(TEXT_COLOR, DEFAULT).equals(CUSTOM) ||
+                myPreference.getString(BACKGROUND_COLOR, DEFAULT).equals(CUSTOM)) {
+            hexCode.setEnabled(true);
+        } else {
+            hexCode.setEnabled(false);
         }
 
         myPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -228,6 +253,24 @@ public class SettingsActivity extends PreferenceActivity {
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.v(LOG_TAG, "onSharedPreferenceChanged");
+        switch (key){
+            case TEXT_COLOR:
+            case BACKGROUND_COLOR:
+                String text = myPreference.getString(TEXT_COLOR, DEFAULT);
+                String background = myPreference.getString(BACKGROUND_COLOR, DEFAULT);
+                Log.d(LOG_TAG, "text: " + text + "  background: " + background);
+                if (text.equals(CUSTOM) || background.equals(CUSTOM)) {
+                    hexCode.setEnabled(true);
+                } else {
+                    hexCode.setEnabled(false);
+                }
+                break;
+        }
     }
 
     /**
