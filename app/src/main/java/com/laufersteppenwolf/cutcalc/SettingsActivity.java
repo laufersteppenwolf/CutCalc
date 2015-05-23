@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.media.MediaActionSound;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -47,9 +49,18 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public static final String TEXT_COLOR = "text_color";
     public static final String BACKGROUND_COLOR = "background_color";
     public static final String COLOR_HEX_CODE = "color_hex_code";
+    public static final String VERSION = "version";
+    public static final String EASTEREGG_KEY = "easteregg";
+    public static final String BACKGROUND_COLOR_BACKUP = "background_color_backup";
+    public static final String TEXT_COLOR_BACKUP = "text_color_backup";
+    public static final String HEX_COLOR_BACKUP = "hex_color_backup";
+
+    public static final int EASTEREGG_CLICKS = 7;
 
     static SharedPreferences myPreference;
     static Preference hexCode;
+
+    static int versionClickCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +124,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         final Preference myPref = (Preference) findPreference("no_background");
         myPreference = PreferenceManager.getDefaultSharedPreferences(this);
         final Preference changeBackground = (Preference) findPreference("change_background");
-        hexCode = (Preference) findPreference("color_hex_code");
+        hexCode = (Preference) findPreference(COLOR_HEX_CODE);
+        final Preference version = (Preference) findPreference(VERSION);
 
         myPreference.registerOnSharedPreferenceChangeListener(this);
 
@@ -136,6 +148,45 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     changeBackground.setEnabled(true);
                 } else {
                     changeBackground.setEnabled(false);
+                }
+                return true;
+            }
+        });
+
+        version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                versionClickCounter++;
+                if (versionClickCounter >= EASTEREGG_CLICKS) {
+                    SharedPreferences.Editor myPreferenceEditor = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContext()).edit();
+                    SharedPreferences myPreference = PreferenceManager.getDefaultSharedPreferences(MainActivity.getContext());
+                    if (!MainActivity.mEasteregg) { //Use MainActivity's variable to enforce its recreation
+                        Toast.makeText(getApplicationContext(), getString(R.string.toast_easteregg),
+                                Toast.LENGTH_LONG).show();
+
+                        myPreferenceEditor.putString(BACKGROUND_COLOR_BACKUP, myPreference.getString(BACKGROUND_COLOR, DEFAULT));
+                        myPreferenceEditor.putString(TEXT_COLOR_BACKUP, myPreference.getString(TEXT_COLOR, DEFAULT));
+                        myPreferenceEditor.putString(HEX_COLOR_BACKUP, myPreference.getString(COLOR_HEX_CODE, "#ffffff"));
+
+                        myPreferenceEditor.putString(BACKGROUND_COLOR, CUSTOM);
+                        myPreferenceEditor.putString(TEXT_COLOR, CUSTOM);
+                        myPreferenceEditor.putString(COLOR_HEX_CODE, "#FFFF69B4");
+                        myPreferenceEditor.putBoolean(EASTEREGG_KEY, true);
+
+                        myPreferenceEditor.commit();
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), getString(R.string.toast_easteregg_restore),
+                                Toast.LENGTH_LONG).show();
+
+                        myPreferenceEditor.putString(BACKGROUND_COLOR, myPreference.getString(BACKGROUND_COLOR_BACKUP, DEFAULT));
+                        myPreferenceEditor.putString(TEXT_COLOR, myPreference.getString(TEXT_COLOR_BACKUP, DEFAULT));
+                        myPreferenceEditor.putString(COLOR_HEX_CODE, myPreference.getString(HEX_COLOR_BACKUP, "#ffffff"));
+                        myPreferenceEditor.putBoolean(EASTEREGG_KEY, false);
+
+                        myPreferenceEditor.commit();
+                    }
+                    versionClickCounter = 0;
                 }
                 return true;
             }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import static com.laufersteppenwolf.cutcalc.MainActivity.EASTEREGG_KEY;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.getColorCode;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColor;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColorHex;
@@ -54,6 +56,7 @@ public class FeedRateActivity extends Activity {
     private Boolean mChangeBackground;
     private Boolean mNoBackground;
     private Boolean mPvcDefault;
+    private Boolean mEasteregg;
 
     private String mFeedMilling;
     private String mFeedTurning;
@@ -90,19 +93,31 @@ public class FeedRateActivity extends Activity {
             mBlades.setText(mBladesDrilling);
             mFeedView.setText(mFeedDrilling);
             if (mChangeBackground && !mNoBackground) {
-                mScrollView.setBackgroundResource(R.drawable.drill);
+                if (!mEasteregg) {
+                    mScrollView.setBackgroundResource(R.drawable.drill);
+                } else {
+                    mScrollView.setBackgroundResource(R.drawable.heart);
+                }
             }
         } else if (mode == 2) {
             mBlades.setText(mBladesTurning);
             mFeedView.setText(mFeedTurning);
             if (mChangeBackground && !mNoBackground) {
-                mScrollView.setBackgroundResource(R.drawable.turning_chisel);
+                if (!mEasteregg) {
+                    mScrollView.setBackgroundResource(R.drawable.turning_chisel);
+                } else {
+                    mScrollView.setBackgroundResource(R.drawable.heart);
+                }
             }
         } else{
             mBlades.setText(mBladesMilling);
             mFeedView.setText(mFeedMilling);
             if (mChangeBackground && !mNoBackground) {
-                mScrollView.setBackgroundResource(R.drawable.milling_cutter);
+                if (!mEasteregg) {
+                    mScrollView.setBackgroundResource(R.drawable.milling_cutter);
+                } else {
+                    mScrollView.setBackgroundResource(R.drawable.heart);
+                }
             }
         }
         doCalc();
@@ -132,6 +147,7 @@ public class FeedRateActivity extends Activity {
         mChangeBackground = myPreference.getBoolean(CHANGE_BACKGROUND, true);
         mNoBackground = myPreference.getBoolean(NO_BACKGROUND, false);
         mPvcDefault = myPreference.getBoolean(PVC_DEFAULT, false);
+        mEasteregg = myPreference.getBoolean(EASTEREGG_KEY, false);
         mFeedMilling = myPreference.getString(DEFAULT_FEED_MILLING, getString(R.string.string_default_feed));
         mFeedTurning = myPreference.getString(DEFAULT_FEED_TURNING, getString(R.string.string_default_feed));
         mFeedDrilling = myPreference.getString(DEFAULT_FEED_DRILLING, getString(R.string.string_default_feed));
@@ -246,7 +262,11 @@ public class FeedRateActivity extends Activity {
         if ((!mBackgroundColor.equals(DEFAULT)) &&
                 (!mBackgroundColor.equals(TRANSPARENT))) {
             Log.d(LOG_TAG, "Background Color: " + mBackgroundColor);
-            linearLayout.setBackgroundColor(getColorCode(mBackgroundColor));
+            if (mBackgroundColor.equals(CUSTOM)) {
+                linearLayout.setBackgroundColor(Color.parseColor(mTextColorCustom));
+            } else {
+                linearLayout.setBackgroundColor(getColorCode(mBackgroundColor));
+            }
         }
 
         if (!mNoBackground) {

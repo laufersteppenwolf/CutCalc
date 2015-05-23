@@ -78,5 +78,7 @@
     <string name="pref_title_background_color">Background Color</string>
     <string name="pref_description_no_background">Do not show a background image</string>
     <string name="pref_no_background">No Background Image</string>
+    <string name="toast_easteregg">You have clicked Version too often, all Hell is about to break loose...</string>
+    <string name="toast_easteregg_restore">Lucky you, you found a way to un-break it again...</string>
 
 </resources>

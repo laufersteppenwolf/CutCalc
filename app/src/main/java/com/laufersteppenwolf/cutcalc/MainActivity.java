@@ -54,6 +54,7 @@ public class MainActivity extends Activity {
     public static final String DEFAULT_VC_DRILLING = "default_drilling_cuttingspeed";
     public static final String DEFAULT_MULTIPLIER = "default_pvc_multiplier_rpm";
     public static final String VERSION = "version";
+    public static final String EASTEREGG_KEY = "easteregg";
 
     private Boolean mChangeBackground;
     private Boolean mNoBackground;
@@ -61,6 +62,7 @@ public class MainActivity extends Activity {
     public static Boolean mDarkTheme;
     public static Boolean darkThemeStore;
     public static Boolean noBackgroundStore;
+    public static Boolean mEasteregg;
 
     private String mVcMilling;
     private String mVcTurning;
@@ -107,17 +109,29 @@ public class MainActivity extends Activity {
         if (mode == 1) {
             mVc.setText(mVcDrilling);
             if (mChangeBackground && !mNoBackground) {
-                mScrollView.setBackgroundResource(R.drawable.drill);
+                if (!mEasteregg) {
+                    mScrollView.setBackgroundResource(R.drawable.drill);
+                } else {
+                    mScrollView.setBackgroundResource(R.drawable.heart);
+                }
             }
         } else if (mode == 2) {
             mVc.setText(mVcTurning);
             if (mChangeBackground && !mNoBackground) {
-                mScrollView.setBackgroundResource(R.drawable.turning_chisel);
+                if (!mEasteregg) {
+                    mScrollView.setBackgroundResource(R.drawable.turning_chisel);
+                } else {
+                    mScrollView.setBackgroundResource(R.drawable.heart);
+                }
             }
         } else{
-            mVc.setText(mVcMilling);
+                mVc.setText(mVcMilling);
             if (mChangeBackground && !mNoBackground) {
-                mScrollView.setBackgroundResource(R.drawable.milling_cutter);
+                if (!mEasteregg) {
+                    mScrollView.setBackgroundResource(R.drawable.milling_cutter);
+                } else {
+                    mScrollView.setBackgroundResource(R.drawable.heart);
+                }
             }
         }
         doCalc();
@@ -152,6 +166,7 @@ public class MainActivity extends Activity {
         mChangeBackground = myPreference.getBoolean(CHANGE_BACKGROUND, true);
         mNoBackground = myPreference.getBoolean(NO_BACKGROUND, false);
         mPvcDefault = myPreference.getBoolean(PVC_DEFAULT, false);
+        mEasteregg = myPreference.getBoolean(EASTEREGG_KEY, false);
         mVcMilling = myPreference.getString(DEFAULT_VC_MILLING, getString(R.string.string_vc_milling));
         mVcTurning = myPreference.getString(DEFAULT_VC_TURNING, getString(R.string.string_vc_turning));
         mVcDrilling = myPreference.getString(DEFAULT_VC_DRILLING, getString(R.string.string_vc_drilling));
@@ -268,7 +283,11 @@ public class MainActivity extends Activity {
         if ((!mBackgroundColor.equals(DEFAULT)) &&
                 (!mBackgroundColor.equals(TRANSPARENT))) {
             Log.d(LOG_TAG, "Background Color: " + mBackgroundColor);
-            linearLayout.setBackgroundColor(getColorCode(mBackgroundColor));
+            if (mBackgroundColor.equals(CUSTOM)) {
+                linearLayout.setBackgroundColor(Color.parseColor(mTextColorCustom));
+            } else {
+                linearLayout.setBackgroundColor(getColorCode(mBackgroundColor));
+            }
         }
 
         if (!mNoBackground) {
