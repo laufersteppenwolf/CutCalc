@@ -11,8 +11,8 @@ android {
         applicationId "com.laufersteppenwolf.cutcalc"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 12
-        versionName "1.5"
+        versionCode 13
+        versionName "1.6"
     }
     buildTypes {
         release {
