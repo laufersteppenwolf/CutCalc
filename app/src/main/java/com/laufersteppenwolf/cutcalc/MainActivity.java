@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Random;
 
+import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.colorIsValid;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.getColorCode;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColor;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColorHex;
@@ -284,7 +285,8 @@ public class MainActivity extends Activity {
                 (!mBackgroundColor.equals(TRANSPARENT))) {
             Log.d(LOG_TAG, "Background Color: " + mBackgroundColor);
             if (mBackgroundColor.equals(CUSTOM)) {
-                linearLayout.setBackgroundColor(Color.parseColor(mTextColorCustom));
+                if (colorIsValid(mTextColorCustom))
+                    linearLayout.setBackgroundColor(Color.parseColor(mTextColorCustom));
             } else {
                 linearLayout.setBackgroundColor(getColorCode(mBackgroundColor));
             }
