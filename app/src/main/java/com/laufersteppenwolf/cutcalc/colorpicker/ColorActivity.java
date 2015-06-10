@@ -110,7 +110,7 @@ public class ColorActivity extends MainActivity {
 
     public static void setTextColorHex(TextView tv, String code) {
         if (colorIsValid(code)) {
-            if (code.contains("#")) {
+            if (code.startsWith("#")) {
                 tv.setTextColor(Color.parseColor(code));
                 Log.d(LOG_TAG, "Parsing color code: " + code);
             } else {
@@ -122,7 +122,7 @@ public class ColorActivity extends MainActivity {
 
     public static void setSwitchColorHex(Switch sw, String code) {
         if (colorIsValid(code)) {
-            if (code.contains("#")) {
+            if (code.startsWith("#")) {
                 sw.setTextColor(Color.parseColor(code));
                 Log.d(LOG_TAG, "Parsing color code: " + code);
             } else {

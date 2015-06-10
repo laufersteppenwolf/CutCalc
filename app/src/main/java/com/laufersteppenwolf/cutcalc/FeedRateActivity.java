@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static com.laufersteppenwolf.cutcalc.MainActivity.EASTEREGG_KEY;
+import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.colorIsValid;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.getColorCode;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColor;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColorHex;
@@ -263,7 +264,15 @@ public class FeedRateActivity extends Activity {
                 (!mBackgroundColor.equals(TRANSPARENT))) {
             Log.d(LOG_TAG, "Background Color: " + mBackgroundColor);
             if (mBackgroundColor.equals(CUSTOM)) {
-                linearLayout.setBackgroundColor(Color.parseColor(mTextColorCustom));
+                if (colorIsValid(mTextColorCustom)) {
+                    if (mTextColorCustom.startsWith("#")) {
+                        Log.d(LOG_TAG, "Parsing color code: " + mTextColorCustom);
+                        linearLayout.setBackgroundColor(Color.parseColor(mTextColorCustom));
+                    } else {
+                        Log.d(LOG_TAG, "Parsing color code: " + mTextColorCustom);
+                        linearLayout.setBackgroundColor(Color.parseColor("#" + mTextColorCustom));
+                    }
+                }
             } else {
                 linearLayout.setBackgroundColor(getColorCode(mBackgroundColor));
             }

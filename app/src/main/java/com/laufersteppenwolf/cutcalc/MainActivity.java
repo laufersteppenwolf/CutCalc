@@ -285,8 +285,15 @@ public class MainActivity extends Activity {
                 (!mBackgroundColor.equals(TRANSPARENT))) {
             Log.d(LOG_TAG, "Background Color: " + mBackgroundColor);
             if (mBackgroundColor.equals(CUSTOM)) {
-                if (colorIsValid(mTextColorCustom))
-                    linearLayout.setBackgroundColor(Color.parseColor(mTextColorCustom));
+                if (colorIsValid(mTextColorCustom)) {
+                    if (mTextColorCustom.startsWith("#")) {
+                        Log.d(LOG_TAG, "Parsing color code: " + mTextColorCustom);
+                        linearLayout.setBackgroundColor(Color.parseColor(mTextColorCustom));
+                    } else {
+                        Log.d(LOG_TAG, "Parsing color code: " + mTextColorCustom);
+                        linearLayout.setBackgroundColor(Color.parseColor("#" + mTextColorCustom));
+                    }
+                }
             } else {
                 linearLayout.setBackgroundColor(getColorCode(mBackgroundColor));
             }
