@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -239,6 +241,7 @@ public class MainActivity extends Activity {
         final Animation shakeX = AnimationUtils.loadAnimation(this, R.anim.shake_x);
 
         final Drawable defaultBackground = mDiameter.getBackground();
+//        final ColorDrawable defaultBackgroundColor = (ColorDrawable) mDiameter.getBackground();
 
         final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
 
@@ -352,7 +355,12 @@ public class MainActivity extends Activity {
                                     buttonCalc.startAnimation(shakeX);
                                     return;
                                 } else {
-                                    mDiameter.setBackground(defaultBackground);
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                        mDiameter.setBackground(defaultBackground);
+                                    } else {
+                                        Log.e(LOG_TAG, "Running in compatibility mode using deprecated API");
+                                        mDiameter.setBackgroundDrawable(defaultBackground);
+                                    }
                                 }
 
                                 double result = round((vc * 1000) / (Math.PI * diameter), 2);
