@@ -2,7 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/action_features_feedRate"
         android:title="@string/action_features_rpm"
-        android:orderInCategory="100"
-        android:showAsAction="ifRoom"
+        android:orderInCategory="110"
+        android:showAsAction="always"
         android:icon="@drawable/ic_rpm"/>
+    <item android:id="@+id/action_features_help"
+        android:title="Help"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom" />
 </menu>

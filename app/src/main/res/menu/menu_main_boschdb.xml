@@ -3,5 +3,5 @@
     <item android:id="@+id/action_features_boschdb"
         android:title="BoschDB"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"/>
+        android:showAsAction="always"/>
 </menu>

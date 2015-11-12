@@ -475,6 +475,10 @@ public class MainActivity extends Activity {
             case R.id.action_features_boschdb:
                 Intent boschdbIntent = getPackageManager().getLaunchIntentForPackage("com.laufersteppenwolf.boschdb");
                 startActivity(boschdbIntent);
+                return true;
+            case R.id.action_features_help:
+                startActivity(new Intent(MainActivity.this, HelpRpm.class));
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -80,5 +80,6 @@
     <string name="pref_no_background">No Background Image</string>
     <string name="toast_easteregg">You have clicked Version too often, all Hell is about to break loose...</string>
     <string name="toast_easteregg_restore">Lucky you, you found a way to un-break it again...</string>
+    <string name="title_activity_help_rpm">HelpRpm</string>
 
 </resources>

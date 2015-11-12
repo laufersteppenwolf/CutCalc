@@ -36,6 +36,10 @@
             android:name=".ColorActivity"
             android:label="@string/title_activity_color" >
         </activity>
+        <activity
+            android:name=".HelpRpm"
+            android:label="@string/title_activity_help_rpm" >
+        </activity>
     </application>
 
 </manifest>

@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static com.laufersteppenwolf.cutcalc.MainActivity.EASTEREGG_KEY;
+import static com.laufersteppenwolf.cutcalc.MainActivity.getContext;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.colorIsValid;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.getColorCode;
 import static com.laufersteppenwolf.cutcalc.colorpicker.ColorActivity.setSwitchColor;
@@ -432,6 +433,10 @@ public class FeedRateActivity extends Activity {
             case R.id.action_features_boschdb:
                 Intent boschdbIntent = getPackageManager().getLaunchIntentForPackage("com.laufersteppenwolf.boschdb");
                 startActivity(boschdbIntent);
+                return true;
+            case R.id.action_features_help:
+                startActivity(new Intent(FeedRateActivity.this, HelpRpm.class));
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
